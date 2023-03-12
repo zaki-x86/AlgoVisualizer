@@ -1,0 +1,9 @@
+build
+*.internal*
+*.user
+*.userprefs
+
+.vscode
+.vscode-test
+*.code-workspace
+.vs
