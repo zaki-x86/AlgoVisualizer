@@ -1,35 +1,80 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 
-project(AlgoVisualizer VERSION 1.0 LANGUAGES CXX)
+##################################################################################
+# Project details
 
+# TODO: Add project documentation website in HOMEPAGE_URL
+# TODO : Add project description
+# TODO: Configure automated version adjustment from a version.txt file
+##################################################################################
 
-################
-# CMake Configs
-################
+project(
+  AlgoVisualizer
+  VERSION 0.1.0
+  DESCRIPTION ""
+  LANGUAGES CXX
+)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_EXTENSIONS ON)
+##################################################################################
+# MAIN_PROJECT CHECK
 
+# determine if project is built as a subproject (using add_subdirectory) or if it is the main project
+##################################################################################
+
+set(MAIN_PROJECT OFF)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(MAIN_PROJECT ON)
+    message(STATUS "AlgoVisualizer is being built as a main project")
+endif()
+
+##################################################################################
+# Setup the include path
+##################################################################################
+
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake ${CMAKE_MODULE_PATH})
+message(STATUS "Module path is set to: ${CMAKE_MODULE_PATH}")
+# include(Utils)
+# include(CompilerWarnings)
+
+##################################################################################
+# set project options
+##################################################################################
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Debug")
+endif()
+message(STATUS "Started CMake for ${XSTL_TARGET} v${PROJECT_VERSION}...\n")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  if (UNIX OR MINGW OR CMAKE_COMPILER_IS_GNUCXX )    
+    add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")    #this will allow to use same _DEBUG macro available in both Linux as well as Windows - MSCV environment. Easy to put Debug specific code.
+  endif()  
+  message(STATUS "_DEBUG macro is added for debugging specific code\n")
+endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+#
+# Prevent building in the source directory
+#
+
+if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+  message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n")
+endif()
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+##################################################################################
+# Add configuration related header files
+##################################################################################
+
+# TODO: Add configuration related header files
+
+##################################################################################
+# Qt Configurations
+##################################################################################
 set(CMAKE_AUTOMOC OFF)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_BUILD_TYPE Debug)
-
-# set(Qt6EntryPointPrivate_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6EntryPointPrivate)
-# set(QT_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6)
-# set(Qt6CoreTools_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6CoreTools)
-# set(Qt6Core_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6Core)
-# set(Qt6GuiTools_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6GuiTools)
-# set(Qt6Gui_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6Gui)
-# set(Qt6WidgetsTools_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6WidgetsTools)
-# set(Qt6Widgets_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6Widgets)
-# set(Qt6_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6)
-# set(Qt6ZlibPrivate_DIR C:/Qt/6.6.0/mingw_64/lib/cmake/Qt6ZlibPrivate)
-# set(WINDEPLOYQT_EXECUTABLE C:/Qt/6.6.0/mingw_64/bin/windeployqt.exe)
 
 if(WIN32)
     if(MSVC)
@@ -44,68 +89,87 @@ else(WIN32)
     set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake/Qt6")
 endif(WIN32)
 
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets)
 
 message(STATUS "Detected Qt version: ${QT_VERSION_MAJOR} (${QT_VERSION})")
+##################################################################################
+# Setup target, library and executable output directories
+##################################################################################
 
-set(PROJECT_SOURCES
-        src/main.cpp
-        src/app/borderlayout.cpp
-        src/app/main_window.cpp
-#        mainwindow.h
-#        mainwindow.ui
-)
+file(GLOB_RECURSE SOURCE_FILES AlgoVisualizer/*.cpp)
+file(GLOB_RECURSE HEADER_FILES AlgoVisualizer/*.h)
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+message(STATUS "Found the following source files: ")
+foreach(SOURCE_FILE ${SOURCE_FILES})
+  message(STATUS "  ${SOURCE_FILE}")
+endforeach()
+
+message(STATUS "Found the following header files: ")
+foreach(HEADER_FILE ${HEADER_FILES})
+  message(STATUS "  ${HEADER_FILE}")
+endforeach()
+
+message(STATUS "Building ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
+
+message(STATUS "Setting up UI...\n")
+add_subdirectory(AlgoVisualizer/ui)
+if(TARGET ${PROJECT_NAME}_UI)
+  message(STATUS "Configured ${PROJECT_NAME}_UI target...\n")
+endif(TARGET ${PROJECT_NAME}_UI)
+
+message(STATUS "Setting up ${PROJECT_NAME}_Algos...\n")
+add_subdirectory(AlgoVisualizer/algos)
+if(TARGET ${PROJECT_NAME}_ALGOS)
+  message(STATUS "Configured ${PROJECT_NAME}_ALGOS target...\n")
+endif(TARGET ${PROJECT_NAME}_ALGOS)
+
+
+message(STATUS "Setting up Tests...\n")
+add_subdirectory(AlgoVisualizer/test)
+
+message(STATUS "Setting up executable target...\n")
+add_executable(${PROJECT_NAME} AlgoVisualizer/main.cpp)
+
+if(TARGET ${PROJECT_NAME})
+
+    target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
+    target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_UI ${PROJECT_NAME}_ALGOS Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Widgets)
+    target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)  
+    set_target_properties(
+    ${PROJECT_NAME}
+    PROPERTIES
+    LINKER_LANGUAGE CXX
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(${PROJECT_NAME} SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(${PROJECT_NAME}
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets)
+endif(TARGET ${PROJECT_NAME})
 
-target_include_directories(
-    ${PROJECT_NAME} 
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/algos
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/app
+if(TARGET ${PROJECT_NAME})
+  message(STATUS "Configured ${PROJECT_NAME} target...\n")
+endif(TARGET ${PROJECT_NAME})
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/algos
-)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+##################################################################################
+# Enable Doxygen
 
-install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+## TODO : Export xml docs
+##################################################################################
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
+# include(Doxygen)
+
+##################################################################################
+# Unit testing setup
+
+## TODO Add unit testing setup
+##################################################################################
+
+if(EnableTesting)
+  enable_testing()
+  verbose_message("Build unit tests for the project. Tests should always be found in the test folder\n")
+  add_subdirectory(AlgoVisualizer/test)
 endif()
