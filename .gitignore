@@ -7,3 +7,5 @@ build
 .vscode-test
 *.code-workspace
 .vs
+
+internal
