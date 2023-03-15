@@ -11,10 +11,10 @@
 
 _BEGIN_ALGOVIZ_UI
 
-CopyRightLabel::CopyRightLabel(QWidget* parent)
+CopyRightLabel::CopyRightLabel(const QString& text, QWidget* parent)
 : QWidget(parent)
 , _layout(new QGridLayout())
-, _copyRightLabel(new QLabel())
+, _copyRightLabel(new QLabel(text))
 {
     setLayout(_layout);
     _layout->setContentsMargins(0, 0, 0, 0);

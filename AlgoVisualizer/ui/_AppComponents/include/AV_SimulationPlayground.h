@@ -15,10 +15,20 @@
 #include "AV_Config.h"
 #include "AV_Utils.h"
 
+#include <QApplication>
 #include <QWidget>
-#include <QGridLayout>
 #include <QLabel>
-#include <QScrollArea>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QTime>
+#include <QTextEdit>
+#include <QThread>    
+#include <QRadioButton>
+
+#include <QDebug>
+
+#define MIN 0
+#define MAX 100
 
 _BEGIN_ALGOVIZ_UI
 
@@ -27,10 +37,54 @@ class SimulationPlayGround : public QWidget
 public:
     explicit SimulationPlayGround(QWidget* parent = nullptr);
     ~SimulationPlayGround();
+    
+    QRadioButton * radioBubble() const;
+    QRadioButton * radioSelection() const;
+    QPushButton * resetBtn() const;
+    QPushButton * sortBtn() const;
 
+    bool sorting() const;
+    void setSorting(bool);
 
-private:
+ private:
     QGridLayout* _layout;
+
+    static const int LENGTH = 10;
+    int _SleepDuration_ms;
+
+    int _data[LENGTH];
+    int _sorting;
+
+    void setSleepDuration_ms(int);
+
+    QRadioButton *_radioBubble;
+    QRadioButton *_radioSelection;
+    QPushButton *_resetBtn;
+    QPushButton *_sortBtn;
+
+    // utility functions
+public:
+    QPushButton *button[LENGTH];
+    /* create dealy in the qt */
+    void delay();
+    /* filling array with random numbers */
+    void updateArray();
+    /* set the background of button to yellow to attract view */
+    void highlightButton(QPushButton * button);
+    /* set the button to normal color */
+    void unhighlightButton(QPushButton * button);
+    /* swap value of a and b */
+    void swap(int *a, int *b);
+    /* set button */
+    void setButtonValue( QPushButton *button, int data);
+    /* run selection sort algorith and update ui */
+    void bubbleSort(QPushButton *button[]);
+    /* run selection sort algorith and update ui */
+    void selectionSort(QPushButton *button[]);
+    /* set button value corresponding to position data equivalent to zip in python */
+    void updateButton(QPushButton *button[]);
+
+
 };
 
 _END_ALGOVIZ_UI

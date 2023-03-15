@@ -19,55 +19,22 @@
 #include <QActionGroup>
 #include <QKeySequence>
 #include <QMessageBox>
-#include <QTranslator>
+#include <QGridLayout>
 
 _BEGIN_ALGOVIZ_UI
 
 class MenuBar : public QWidget
 {
 public:
-    MenuBar(QWidget* parent = nullptr);
+    MenuBar(utils::QStringOneToVectorMap menus, QWidget* parent = nullptr);
     ~MenuBar();
 
-    void setupMenuBar();
-
-    QMenuBar* menuBar() const;
+    QMenuBar* minuBarWidget() const { return _menuBar; }
 
 private:
+    QGridLayout* _layout;
     QMenuBar* _menuBar;
-    QMenu* _fileMenu;
-    QMenu* _editMenu;
-    QMenu* _viewMenu;
-    QMenu* _helpMenu;
-
-    QAction* _newAction;
-    QAction* _openAction;
-    QAction* _saveAction;
-    QAction* _saveAsAction;
-    QAction* _exitAction;
-
-    QAction* _undoAction;
-    QAction* _redoAction;
-    QAction* _cutAction;
-    QAction* _copyAction;
-    QAction* _pasteAction;
-    QAction* _deleteAction;
-    QAction* _selectAllAction;
-
-    QAction* _zoomInAction;
-    QAction* _zoomOutAction;
-
-    QAction* _aboutAction;
-    QAction* _aboutQtAction;
-
-    void setupFileMenu();
-    void setupEditMenu();
-    void setupViewMenu();
-    void setupHelpMenu();
-
-    void setupActions();
-    void setupShortcuts();
-    void setupSignals();
+    utils::QStringOneToVectorMap _menus;
 };
 
 _END_ALGOVIZ_UI

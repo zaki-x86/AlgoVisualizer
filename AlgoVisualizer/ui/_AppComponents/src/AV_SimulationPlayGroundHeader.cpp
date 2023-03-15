@@ -19,12 +19,10 @@ SimulationPlayGroundHeader::SimulationPlayGroundHeader(QWidget* parent)
     _layout->setSpacing(0);
 
     _titleLabel = new QLabel("Title", this);
-    _titleLabel->setStyleSheet("font-size: 20px; font-weight: bold; color: #000000;");
     _titleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     _layout->addWidget(_titleLabel, 0, 0, 1, 1);
 
     _descriptionLabel = new QLabel("Description", this);
-    _descriptionLabel->setStyleSheet("font-size: 12px; color: #000000;");
     _descriptionLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     _layout->addWidget(_descriptionLabel, 1, 0, 1, 1);
 }

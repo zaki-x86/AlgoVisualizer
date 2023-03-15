@@ -15,14 +15,12 @@ _BEGIN_ALGOVIZ_UI
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
 {
-    _layout = new QGridLayout(this);
-    _layout->setContentsMargins(0, 0, 0, 0);
-    _layout->setSpacing(0);
+    _statusMessage = "Ready";
+    showMessage(_statusMessage);
 }
 
 StatusBar::~StatusBar()
 {
-    delete _layout;
 }
 
-_END_ALGOVIZ_UI
+_END_ALGOVIZ_UI 

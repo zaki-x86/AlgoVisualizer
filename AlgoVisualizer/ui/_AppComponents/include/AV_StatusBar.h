@@ -27,7 +27,7 @@ public:
     ~StatusBar();
     
 private:
-    QGridLayout* _layout;
+    QString _statusMessage;
 };
 
 _END_ALGOVIZ_UI

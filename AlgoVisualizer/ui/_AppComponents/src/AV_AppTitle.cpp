@@ -17,7 +17,7 @@ AppTitle::AppTitle(const QString& title, QWidget* parent)
 , _titleLabel(new QLabel(title))
 {
     setLayout(_layout);
-    _layout->setContentsMargins(0, 0, 0, 0);
+    _layout->setContentsMargins(5, 5, 5, 5);
     _layout->setSpacing(0);
     _layout->addWidget(_titleLabel, 0, 0, 1, 1, Qt::AlignCenter);
 

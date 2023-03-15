@@ -18,30 +18,20 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QSlider>
+#include <QList>
 
 _BEGIN_ALGOVIZ_UI
 
 class SimulationControls : public QWidget
 {
 public:
-    explicit SimulationControls(QWidget* parent = nullptr);
+    explicit SimulationControls(QList<QString> buttons, QWidget* parent = nullptr);
     ~SimulationControls();
 
-    QPushButton* playButton();
-    QPushButton* pauseButton();
-    QPushButton* stopButton();
-    QPushButton* speedUpButton();
-    QPushButton* resetButton();
-    QSlider* speedSlider();
 
 private:
     QGridLayout* _layout;
-    QPushButton* _playButton;
-    QPushButton* _pauseButton;
-    QPushButton* _stopButton;
-    QPushButton* _speedUpButton;
-    QPushButton* _resetButton;
-    QSlider* _speedSlider;
+    QList<QString> _buttons;
 };
 
 _END_ALGOVIZ_UI

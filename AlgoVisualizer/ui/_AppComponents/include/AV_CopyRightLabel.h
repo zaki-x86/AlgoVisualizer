@@ -22,7 +22,7 @@ _BEGIN_ALGOVIZ_UI
 class CopyRightLabel : public QWidget
 {
 public:
-    explicit CopyRightLabel(QWidget* parent = nullptr);
+    explicit CopyRightLabel(const QString& text, QWidget* parent = nullptr);
     ~CopyRightLabel();
 
     QString text() const ;
