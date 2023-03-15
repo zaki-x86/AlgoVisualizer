@@ -10,6 +10,17 @@
 #ifndef __LAYOUT_UTILS_H
 #define __LAYOUT_UTILS_H
 
+#include <QWidget>
+#include <QGridLayout>
+#include <QLabel>
+
+#include <string>
+
+#include "AV_Utils.h"
+#include "AV_Config.h"
+
+_BEGIN_ALGOVIZ_UI
+
 enum _ComponentStretch
 {
     Minimum = 0,
@@ -18,5 +29,7 @@ enum _ComponentStretch
     _3_Times = 3,
     _4_Times = 4,
 };
+
+_END_ALGOVIZ_UI
 
 #endif // __LAYOUT_UTILS_H
