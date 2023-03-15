@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMap>
 #include <QVector>
+#include <QList>
 #include <QString>
 #include <QFile>
 #include <QTextStream>
@@ -22,6 +23,8 @@ template <typename _T1, typename _T2>
 using OneToVectorMap = QMap<_T1, QVector<_T2>>;
 
 using QStringOneToVectorMap = OneToVectorMap<QString, QString>;
+
+using StringList = QList<QString>;
 
 /**
  * @brief Read a stylesheet from a file

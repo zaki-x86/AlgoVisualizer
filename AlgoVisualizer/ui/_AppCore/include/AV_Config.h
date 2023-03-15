@@ -26,6 +26,7 @@
 #define APP_NAME "AlgoVisualizer"
 #define APP_DESCRIPTION "A visualizer for algorithms"
 #define APP_VERSION "1.0.0"
+#define COPYRIGHT_LABEL "Copyright © 2023 M Zaki <zaki.x86@gmail.com>"
 
 
 // ===============================================================
