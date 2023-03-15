@@ -24,7 +24,8 @@ HeaderLayout::HeaderLayout(AppTitle* appTitle, AppDescription* appDesciption, Me
 
     _layout->addWidget(_appTitle, 0, 0, 1, 1, Qt::AlignLeft);
     _layout->addWidget(_appDescription, 1, 0, 1, 1, Qt::AlignLeft);
-    _layout->addWidget(_menuBar, 0, 1, 2, 1, Qt::AlignRight);
+    
+    parent->layout()->setMenuBar(_menuBar);
 }
 
 HeaderLayout::~HeaderLayout()

@@ -33,7 +33,7 @@ _BEGIN_ALGOVIZ_UI
 class FooterLayout : public QWidget
 {
 public:
-    explicit FooterLayout(QWidget* parent = nullptr);
+    explicit FooterLayout(StatusBar* statusBar, CopyRightLabel* copyright, QWidget* parent = nullptr);
     ~FooterLayout();
 
     StatusBar* statusBar();

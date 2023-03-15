@@ -11,14 +11,14 @@
 
 _BEGIN_ALGOVIZ_UI
 
-FooterLayout::FooterLayout(QWidget* parent)
+FooterLayout::FooterLayout(StatusBar* statusBar, CopyRightLabel* copyright, QWidget* parent)
 : QWidget(parent)
 , _layout(new QGridLayout())
-, _statusBar(nullptr)
-, _copyRightLabel(nullptr)
+, _statusBar(statusBar)
+, _copyRightLabel(copyright)
 {
     setLayout(_layout);
-	_layout->setContentsMargins(0, 0, 0, 0);
+	_layout->setContentsMargins(5, 5, 5, 5);
 	_layout->setSpacing(0);
     
     _layout->addWidget(_statusBar, 0, 0, 1, 1, Qt::AlignLeft);
@@ -30,7 +30,7 @@ FooterLayout::FooterLayout(QWidget* parent)
 
 FooterLayout::~FooterLayout()
 {
-
+    delete _layout;
 }
 
 StatusBar* FooterLayout::statusBar()

@@ -30,31 +30,70 @@ WindowGrid::WindowGrid(HeaderLayout* header, CentralLayout* central, SideBarLayo
     _mainWindowLayout->setContentsMargins(0, 0, 0, 0);
     _mainWindowLayout->setSpacing(0);
     
-    _mainWindowLayout->addWidget(_header, 0, 0, 3, 1);
-    _mainWindowLayout->addWidget(_central, 1, 1, 1, 1);
-    _mainWindowLayout->addWidget(_leftBar, 1, 0, 1, 1);
-    _mainWindowLayout->addWidget(_rightBar, 1, 2, 1, 1);
-    _mainWindowLayout->addWidget(_footer, 2, 0, 3, 1);
-    
-    _mainWindowLayout->setColumnStretch(0, 1);
-    _mainWindowLayout->setColumnStretch(1, 4);
-    _mainWindowLayout->setColumnStretch(2, 1);
-    
-    _mainWindowLayout->setRowStretch(0, 1);
-    _mainWindowLayout->setRowStretch(1, 4);
-    _mainWindowLayout->setRowStretch(2, 1);
-    
-    //_mainWindowLayout->setColumnMinimumWidth(0, 0);
-    //_mainWindowLayout->setColumnMinimumWidth(2, 0);
-    
-    //_mainWindowLayout->setRowMinimumHeight(0, 0);
-    //_mainWindowLayout->setRowMinimumHeight(1, 0);
-    //_mainWindowLayout->setRowMinimumHeight(2, 0);
+    // if every section is defined_mainWindowLayout->addWidget(_footer, 2, 0, 1, 3);
+    if(_header && _central && _leftBar && _rightBar && _footer) {
+        _mainWindowLayout->addWidget(_header, 0, 0, 1, 3);
+        _mainWindowLayout->addWidget(_leftBar, 1, 0, 1, 1);
+        _mainWindowLayout->addWidget(_rightBar, 1, 2, 1, 1);
+        _mainWindowLayout->addWidget(_central, 1, 1, 1, 1);
+        
+        _mainWindowLayout->setColumnStretch(0, 1);
+        _mainWindowLayout->setColumnStretch(1, 4);
+        _mainWindowLayout->setColumnStretch(2, 1);
+        
+        _mainWindowLayout->setRowStretch(0, 1);
+        _mainWindowLayout->setRowStretch(1, 4);
+        _mainWindowLayout->setRowStretch(2, 1);
+    }
+
+    // if no header is provided, then the window will only have 2 rows, 3 columns
+    else if(_central && _leftBar && _rightBar && _footer) {
+        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
+        _mainWindowLayout->addWidget(_rightBar, 0, 2, 1, 1);
+        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
+        _mainWindowLayout->addWidget(_footer, 1, 0, 1, 3);
+
+        _mainWindowLayout->setColumnStretch(0, 1);
+        _mainWindowLayout->setColumnStretch(1, 4);
+        _mainWindowLayout->setColumnStretch(2, 1);
+        
+        _mainWindowLayout->setRowStretch(0, 4);
+        _mainWindowLayout->setRowStretch(1, 1);
+    }
+
+    // if no header and footer is provided, then the window will only have 1 row, 3 columns
+    else if(_central && _leftBar && _rightBar) {
+        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
+        _mainWindowLayout->addWidget(_rightBar, 0, 2, 1, 1);
+        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
+
+        _mainWindowLayout->setColumnStretch(0, 1);
+        _mainWindowLayout->setColumnStretch(1, 4);
+        _mainWindowLayout->setColumnStretch(2, 1);
+        
+        _mainWindowLayout->setRowStretch(0, 1);
+    }
+    // if no header, footer and right bar is provided, then the window will only have 1 row, 2 columns
+    else if(_central && _leftBar) {
+        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
+        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
+
+        _mainWindowLayout->setColumnStretch(0, 1);
+        _mainWindowLayout->setColumnStretch(1, 4);        
+    }
+    // if no header, footer, right bar and left bar is provided, then the window will only have 1 row, 1 column
+    else if(_central) {
+        _mainWindowLayout->addWidget(_central, 0, 0, 1, 1);
+
+        _mainWindowLayout->setColumnStretch(0, 1);
+        
+        _mainWindowLayout->setRowStretch(0, 1);
+    }    
 }
 
 WindowGrid::~WindowGrid()
 {
-    
+    delete _mainWindowLayout;
 }
 
 HeaderLayout* WindowGrid::header() const

@@ -18,7 +18,7 @@ SideBarHeader::SideBarHeader(const QString& title, const QString& desc, QWidget*
 , _descriptionLabel(new QLabel(desc))
 {
 	setLayout(_layout);
-	_layout->setContentsMargins(0, 0, 0, 0);
+	_layout->setContentsMargins(15, 15, 15, 15);
 	_layout->setSpacing(0);
 
 	_titleLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
@@ -64,11 +64,12 @@ SideBarLayout::SideBarLayout(SideBarHeader* header, QWidget* parent)
 , _sections()
 {
 	setLayout(_layout);
-	_layout->setContentsMargins(0, 0, 0, 0);
+	_layout->setContentsMargins(10, 10, 10, 10);
 	_layout->setSpacing(0);
 
 	_sections.append(header);
 	_layout->addWidget(header, 0, 0, 1, 1, Qt::AlignTop);
+	_layout->setRowStretch(0, 0);
 }
 
 SideBarLayout::~SideBarLayout()
@@ -93,6 +94,7 @@ void SideBarLayout::addSection(QWidget* section)
 {
 	_sections.append(section);
 	_layout->addWidget(section, _sections.size(), 0, 1, 1);
+	_layout->setRowStretch(_sections.size(), 1);
 }
 
 _END_ALGOVIZ_UI
