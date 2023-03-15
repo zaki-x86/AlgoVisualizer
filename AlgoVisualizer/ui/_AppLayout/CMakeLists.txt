@@ -22,7 +22,8 @@ endif()
 
 target_link_libraries(UI_AppLayout
     PRIVATE
-        UI_AppUtils
+        UI_AppCore
+        UI_AppComponents
         Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Widgets
 )
@@ -31,8 +32,6 @@ target_include_directories(UI_AppLayout
     PUBLIC
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/AlgoViusalizer
-        ${CMAKE_SOURCE_DIR}/AlgoViusalizer/ui
 )
 
 target_compile_definitions(UI_AppLayout
