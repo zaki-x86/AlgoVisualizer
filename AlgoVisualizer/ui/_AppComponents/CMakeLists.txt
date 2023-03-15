@@ -1,7 +1,5 @@
 file(GLOB_RECURSE UI_AppComponents_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc
 )
 
@@ -22,7 +20,7 @@ endif()
 
 target_link_libraries(UI_AppComponents
     PRIVATE
-        UI_AppUtils
+        UI_AppCore
         Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Widgets
 )
