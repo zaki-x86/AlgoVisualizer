@@ -21,18 +21,19 @@ add_subdirectory(_AppCore)
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_add_library(
         ${PROJECT_NAME}_UI
-        _AppUI/AppUI.cpp
+        INTERFACE
     )
 else()
     add_library(
         ${PROJECT_NAME}_UI 
-        _AppUI/AppUI.cpp
+        INTERFACE
     )
 endif()
 
 
 
 target_link_libraries(${PROJECT_NAME}_UI
+    INTERFACE
     UI_AppComponents
     UI_AppLayout
     UI_AppCore
@@ -42,7 +43,7 @@ target_link_libraries(${PROJECT_NAME}_UI
 
 target_include_directories(
     ${PROJECT_NAME}_UI
-    PUBLIC
+    INTERFACE
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
