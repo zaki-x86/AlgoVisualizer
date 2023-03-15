@@ -15,7 +15,7 @@ message(STATUS "Building ${PROJECT_NAME} UI Layouts")
 add_subdirectory(_AppLayout)
 
 message(STATUS "Building ${PROJECT_NAME} UI Utilities")
-add_subdirectory(_AppUtils)
+add_subdirectory(_AppCore)
 
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
@@ -35,7 +35,7 @@ endif()
 target_link_libraries(${PROJECT_NAME}_UI
     UI_AppComponents
     UI_AppLayout
-    UI_AppUtils
+    UI_AppCore
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Widgets
 )
