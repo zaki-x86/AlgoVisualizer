@@ -11,7 +11,6 @@
 #define __AV_ALGORITHMS_LIST_H
 
 #include <QWidget>
-#include <QGroupBox>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QRadioButton>
@@ -20,8 +19,8 @@
 #include "AV_Config.h"
 #include "AV_Utils.h" 
 
-#include <QGroupBox>
-#include <QVBoxLayout>
+#include <QButtonGroup>
+#include <QGridLayout>
 #include <QLabel>
 #include <QRadioButton>
 #include <QString>
@@ -58,9 +57,9 @@ public:
     /**
      * @brief Get the selected algorithm
      * 
-     * @return QString Name of the selected algorithm
+     * @return QRadioButton* the selected algorithm button
     */
-    QString getSelectedAlgorithm() const;
+    QRadioButton* getSelectedAlgorithm() const;
 
     /**
      * @brief Get a map of algorithms
@@ -69,9 +68,15 @@ public:
 
 private:
     // Set a layout for AlgorithmsList
-    QVBoxLayout* _layout;
+    QGridLayout* _layout;
+
+    // Group all buttons to prevent multiple selection
+    QButtonGroup* _group;
+
     // Map of algorithms
     utils::OneToVectorMap<QString, QString> _algorithmsMap;
+    
+    
 };
 
 _END_ALGOVIZ_UI

@@ -13,26 +13,31 @@ _BEGIN_ALGOVIZ_UI
 
 AlgorithmsList::AlgorithmsList(utils::OneToVectorMap<QString, QString> algorithms, QWidget* parent)
     : QWidget(parent)
+    , _layout(new QGridLayout(this))
+    , _group(new QButtonGroup(this))
     , _algorithmsMap(algorithms)
 {
-    _layout = new QVBoxLayout(this);
+    _group->setExclusive(true);
+
+    setLayout(_layout);
     _layout->setContentsMargins(0, 0, 0, 0);
     _layout->setSpacing(0);
 
-    for (auto& category : algorithms.keys())
+    for (auto it = algorithms.begin(); it != algorithms.end(); it++)
     {
-        auto categoryBox = new QGroupBox(category, this);
-        auto categoryLayout = new QVBoxLayout(categoryBox);
-        categoryLayout->setContentsMargins(0, 0, 0, 0);
-        categoryLayout->setSpacing(0);
+        auto category = it.key();
+        auto algorithms = it.value();
+    
+        QLabel* categoryLabel = new QLabel(category, this);
+        categoryLabel->setStyleSheet("font-weight: bold;");
+        _layout->addWidget(categoryLabel, _layout->rowCount(), 0);
 
-        for (auto& algorithm : algorithms[category])
+        for (auto& algorithm : algorithms)
         {
-            auto algorithmButton = new QRadioButton(algorithm, categoryBox);
-            categoryLayout->addWidget(algorithmButton);
+            auto algorithmButton = new QRadioButton(algorithm, this);
+            _group->addButton(algorithmButton);
+            _layout->addWidget(algorithmButton, _layout->rowCount(), 0);
         }
-
-        _layout->addWidget(categoryBox);
     }
 }
 
@@ -43,29 +48,12 @@ AlgorithmsList::~AlgorithmsList()
 
 void AlgorithmsList::addAlgorithm(const QString& category, const QString& algorithm)
 {
-    if (!_algorithmsMap.contains(category))
-    {
-        _algorithmsMap[category] = QVector<QString>();
-    }
-
-    _algorithmsMap[category].push_back(algorithm);
+    
 }
 
-QString AlgorithmsList::getSelectedAlgorithm() const
+QRadioButton* AlgorithmsList::getSelectedAlgorithm() const
 {
-    for (auto& category : _algorithmsMap.keys())
-    {
-        for (auto& algorithm : _algorithmsMap[category])
-        {
-            auto algorithmButton = findChild<QRadioButton*>(algorithm);
-            if (algorithmButton->isChecked())
-            {
-                return algorithm;
-            }
-        }
-    }
-
-    return QString();
+    return (QRadioButton*)_group->checkedButton();
 }
 
 utils::OneToVectorMap<QString, QString> AlgorithmsList::getAlgorithmsMap() const

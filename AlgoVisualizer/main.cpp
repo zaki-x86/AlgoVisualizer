@@ -37,7 +37,7 @@ main(int argc, char *argv[])
 			{"Sorting", {"Bubble Sort", "Selection Sort", "Insertion Sort", "Merge Sort", "Quick Sort"}},
 			{"Path Finding", {"Dijkstra", "A*", "BFS", "DFS", "Bellman-Ford", "Floyd-Warshall"}},
 			{"Graph", {"Kruskal", "Prim", "Topological Sort", "Hamiltonian Cycle"}},
-			{"Neural Network", {"Perceptron", "Backpropagation", "Genetic Algorithm", "Reinforcement Learning"}}
+			{"Neural Network", {"Single Layer Perceptron", "Deep Neural Network"}}
 		}
 	);
 
@@ -50,9 +50,9 @@ main(int argc, char *argv[])
 		}
 	);
 
-	AlgoViz::ui::utils::StringList buttons_list(
+	AlgoViz::ui::utils::StringVector buttons_list(
 		{
-			"Play", "Pause", "Stop", "Speed Up", "Reset"
+			"Play", "Pause", "Speed Up", "Reset"
 		}
 	);
 
@@ -99,34 +99,37 @@ main(int argc, char *argv[])
 	// -------Simulation-------------
 	// when reset button is pressed, generate another random set of array
 	// and update it in GUI
-	qDebug() << "Connecting reset button...";
-	QObject::connect(av_playground->resetBtn(), &QPushButton::clicked, [&]() {
+	QObject::connect(av_controls->resetBtn(), &QPushButton::clicked, [&]() {
 		// when reset button is pressed generate another random set of array
 		// and update it in GUI
 		av_playground->updateArray();
 		av_playground->updateButton(av_playground->button);
-		av_playground->sortBtn()->setText("SORT");
+		av_controls->playBtn()->setText("Play");
 	});
 
-	// --------------------
-	// when sort button is pressed, sort the array
-	qDebug() << "Connecting sort button...";
-	QObject::connect(av_playground->sortBtn(), &QPushButton::clicked, [&]() {
-		if (av_playground->sorting() == true)
+
+	AlgoViz::ui::utils::av_slot_t sort_action = [&]() {
+		if (av_playground->state() == AlgoViz::ui::SimState::RUNNING)
 		{
 			// if _sorting already in place don't do anything
 			return;
 		}
-		av_playground->setSorting(true);
-		av_playground->resetBtn()->setVisible(false);
-		av_playground->sortBtn()->setText("_sorting...");
-		// if binary sort radio button is clicked do binary sort
-		// else do selection sort
-		av_playground->radioBubble()->isChecked() ? av_playground->bubbleSort(av_playground->button) : av_playground->selectionSort(av_playground->button);
-		av_playground->resetBtn()->setVisible(true);
-		av_playground->sortBtn()->setText("SORT");
-		av_playground->setSorting(false);
-	});
+
+		av_playground->setState(AlgoViz::ui::SimState::RUNNING);
+		av_controls->resetBtn()->setVisible(false);
+		av_controls->playBtn()->setText("Sorting...");
+		
+		if (av_algos->getSelectedAlgorithm()->text() == "Bubble Sort")
+			av_playground->bubbleSort(av_playground->button);
+		else if(av_algos->getSelectedAlgorithm()->text() == "Selection Sort")
+			av_playground->selectionSort(av_playground->button);
+
+		av_controls->resetBtn()->setVisible(true);
+		av_controls->playBtn()->setText("Play");
+		av_playground->setState(AlgoViz::ui::SimState::IDLE);
+	};
+
+	av_controls->connectToPlayBtn(sort_action);
 
 	return app.exec();
 }

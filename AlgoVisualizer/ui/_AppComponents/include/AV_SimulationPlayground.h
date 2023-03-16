@@ -32,19 +32,19 @@
 
 _BEGIN_ALGOVIZ_UI
 
+enum class SimState { RUNNING = 0, PAUSE = 1, IDLE=2 };
+
 class SimulationPlayGround : public QWidget
 {
+protected:  
+
 public:
     explicit SimulationPlayGround(QWidget* parent = nullptr);
     ~SimulationPlayGround();
     
-    QRadioButton * radioBubble() const;
-    QRadioButton * radioSelection() const;
-    QPushButton * resetBtn() const;
-    QPushButton * sortBtn() const;
 
-    bool sorting() const;
-    void setSorting(bool);
+    SimState state() const;
+    void setState(SimState);
 
  private:
     QGridLayout* _layout;
@@ -53,14 +53,10 @@ public:
     int _SleepDuration_ms;
 
     int _data[LENGTH];
-    int _sorting;
+    SimState _state;
 
     void setSleepDuration_ms(int);
 
-    QRadioButton *_radioBubble;
-    QRadioButton *_radioSelection;
-    QPushButton *_resetBtn;
-    QPushButton *_sortBtn;
 
     // utility functions
 public:
@@ -83,8 +79,6 @@ public:
     void selectionSort(QPushButton *button[]);
     /* set button value corresponding to position data equivalent to zip in python */
     void updateButton(QPushButton *button[]);
-
-
 };
 
 _END_ALGOVIZ_UI

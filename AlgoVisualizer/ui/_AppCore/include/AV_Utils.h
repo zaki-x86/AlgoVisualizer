@@ -1,6 +1,8 @@
 #ifndef __APP_UTILS_H
 #define __APP_UTILS_H
 
+#include <functional>
+
 #include <QWidget>
 #include <QMap>
 #include <QVector>
@@ -24,7 +26,14 @@ using OneToVectorMap = QMap<_T1, QVector<_T2>>;
 
 using QStringOneToVectorMap = OneToVectorMap<QString, QString>;
 
-using StringList = QList<QString>;
+using StringVector = QVector<QString>;
+
+/**
+ * @brief a function type that accepts lambdas function with no arguments and no return value
+ * 
+ * @note used by the buttons to connect a sepcific function to a button
+*/
+using av_slot_t = std::function<void()>;
 
 /**
  * @brief Read a stylesheet from a file

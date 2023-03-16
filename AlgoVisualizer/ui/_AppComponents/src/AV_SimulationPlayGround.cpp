@@ -12,31 +12,16 @@
 _BEGIN_ALGOVIZ_UI
 
 SimulationPlayGround::SimulationPlayGround(QWidget *parent)
-	: QWidget(parent), _layout(new QGridLayout()), _SleepDuration_ms(100), _sorting(false)
+	: QWidget(parent), _layout(new QGridLayout()), _SleepDuration_ms(100), _state(SimState::IDLE)
 {
-	// Setting up debug messages
-
-	qDebug() << "SimulationPlayGround::SimulationPlayGround()";
-	qDebug() << "Setting up the simulation playground layout...";
-
 	setLayout(_layout);
 	_layout->setContentsMargins(0, 0, 0, 0);
 	_layout->setSpacing(0);
 
-// ----------
 	// create a button array
 	qDebug() << "Creating a random array...";
 	updateArray();
 
-	// print the content of _data array
-	for (int i = 0; i < LENGTH; i++)
-	{
-		qDebug() << _data[i] << " ";
-	}
-	qDebug() << "\n";
-	qDebug() << "Random array created successfully!";
-// ----------
-	qDebug() << "Creating buttons...";
 	for (int i = 0; i < LENGTH; i++)
 	{
 		std::string name = std::to_string(_data[i]);
@@ -47,76 +32,27 @@ SimulationPlayGround::SimulationPlayGround(QWidget *parent)
 		_layout->addWidget(button[i], 0, i, 1, 1);
 	}
 	qDebug() << "Buttons created successfully!";
-
-	// --------------------
-	// create radio buttons
-	qDebug() << "Creating radio buttons...";
-	_radioBubble = new QRadioButton(QObject::tr("bubble sort"));
-	_radioSelection = new QRadioButton(QObject::tr("selection sort"));
-	
-	_radioBubble->setChecked(true);
-	_layout->addWidget(_radioBubble, 3, 0, 1, 1);
-	_layout->addWidget(_radioSelection, 3, 1, 1, 1);
-	
-
-	// reset button
-	_resetBtn = new QPushButton("RESET");
-	_resetBtn->setStyleSheet("\
-        color: red; \
-        font-weight: bold; \
-    ");
-	_layout->addWidget(_resetBtn, 3, 8, 1, 1);
-
-	// sort button
-	_sortBtn = new QPushButton("SORT");
-	_sortBtn->setStyleSheet("\
-        color: green; \
-        font-weight: bold; \
-    ");
-	_layout->addWidget(_sortBtn, 3, 9, 1, 1);
-	
-	qDebug() << "Radio buttons created successfully!";
 }
 
-bool SimulationPlayGround::sorting() const
+SimState SimulationPlayGround::state() const
 {
-	return _sorting;
+	return _state;
+}
+
+void
+SimulationPlayGround::setState(SimState state)
+{
+	_state = state;
 }
 
 SimulationPlayGround::~SimulationPlayGround() { 
 	delete _layout; 
 }
 
-QRadioButton * SimulationPlayGround::radioBubble() const
-{
-	return _radioBubble;
-}
-
-QRadioButton * SimulationPlayGround::radioSelection() const
-{
-	return _radioSelection;
-}
-
-QPushButton * SimulationPlayGround::resetBtn() const
-{
-	return _resetBtn;
-}
-
-QPushButton * SimulationPlayGround::sortBtn() const
-{
-	return _sortBtn;
-}
-
 void
 SimulationPlayGround::setSleepDuration_ms(int duration)
 {
 	_SleepDuration_ms = duration;
-}
-
-void
-SimulationPlayGround::setSorting(bool _sorting)
-{
-	_sorting = _sorting;
 }
 
 void

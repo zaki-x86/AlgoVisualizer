@@ -13,25 +13,44 @@
 #include "AV_Config.h"
 #include "AV_Utils.h"
 
+#include <QObject>
 #include <QWidget>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QSlider>
-#include <QList>
+#include <QVector>
 
 _BEGIN_ALGOVIZ_UI
 
 class SimulationControls : public QWidget
 {
 public:
-    explicit SimulationControls(QList<QString> buttons, QWidget* parent = nullptr);
+    explicit SimulationControls(QVector<QString> buttons, QWidget* parent = nullptr);
     ~SimulationControls();
+
+    // Button accessors functions for (play, pause, speedup and reset)
+    QPushButton* playBtn() const;
+    QPushButton* pauseBtn() const;
+    QPushButton* speedupBtn() const;
+    QPushButton* resetBtn() const;
+
+    // Connect the buttons to the slots
+    // functions are overloaded to accept a lambda function, so that there is no need to pass a receiver object
+    void connectToPlayBtn(QObject* receiver, const char* slot);
+    void connectToPlayBtn(utils::av_slot_t slot);
+    void connectToPauseBtn(QObject* receiver, const char* slot);
+    void connectToSpeedupBtn(QObject* receiver, const char* slot);
+    void connectToResetBtn(QObject* receiver, const char* slot);
 
 
 private:
     QGridLayout* _layout;
-    QList<QString> _buttons;
+    QVector<QString> _buttons; //{play, pause, speedup, reset}
+
+    // Validate the buttons, they must contain (play, pause, speedup and reset)
+    // TODO implementation needs to be completed
+    bool _validate_buttons() { return true; }
 };
 
 _END_ALGOVIZ_UI
