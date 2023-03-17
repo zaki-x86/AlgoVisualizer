@@ -13,17 +13,19 @@ _BEGIN_ALGOVIZ_UI
 
 SimulationPlayGroundHeader::SimulationPlayGroundHeader(QWidget* parent)
     : QWidget(parent)
+    , _layout(new QGridLayout(this))
+    , _titleLabel(new QLabel(this))
+    , _descriptionLabel(new QLabel(this))
 {
-    _layout = new QGridLayout(this);
+    setLayout(_layout);
+
     _layout->setContentsMargins(0, 0, 0, 0);
     _layout->setSpacing(0);
 
-    _titleLabel = new QLabel("Title", this);
-    _titleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    _titleLabel->setAlignment(Qt::AlignHCenter);
     _layout->addWidget(_titleLabel, 0, 0, 1, 1);
 
-    _descriptionLabel = new QLabel("Description", this);
-    _descriptionLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    _descriptionLabel->setAlignment(Qt::AlignCenter);
     _layout->addWidget(_descriptionLabel, 1, 0, 1, 1);
 }
 

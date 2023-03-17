@@ -108,7 +108,7 @@ main(int argc, char *argv[])
 	});
 
 
-	AlgoViz::ui::utils::av_slot_t sort_action = [&]() {
+	AlgoViz::ui::utils::av_slot_t sim_action = [&]() {
 		if (av_playground->state() == AlgoViz::ui::SimState::RUNNING)
 		{
 			// if _sorting already in place don't do anything
@@ -119,8 +119,16 @@ main(int argc, char *argv[])
 		av_controls->resetBtn()->setVisible(false);
 		av_controls->playBtn()->setText("Sorting...");
 		
-		if (av_algos->getSelectedAlgorithm()->text() == "Bubble Sort")
+		if (av_algos->getSelectedAlgorithm()->text() == "Bubble Sort") {
+			// Set the title of the playground
+			av_playgroundHeader->setTitle("Bubble Sort");
+			
+			// Write a brief description of the algorithm, and how to run the simulation
+			av_playgroundHeader->setDescription("Bubble Sort is a simple sorting algorithm. This sorting algorithm is comparison-based algorithm in which each pair of adjacent elements is compared and the elements are swapped if they are not in order. This algorithm is not suitable for large data sets as its average and worst case complexity are of Ο(n2) where n is the number of items.");
+			
+			// Run the simulation
 			av_playground->bubbleSort(av_playground->button);
+		}
 		else if(av_algos->getSelectedAlgorithm()->text() == "Selection Sort")
 			av_playground->selectionSort(av_playground->button);
 

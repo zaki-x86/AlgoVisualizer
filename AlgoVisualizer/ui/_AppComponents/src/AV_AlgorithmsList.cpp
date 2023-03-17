@@ -31,6 +31,8 @@ AlgorithmsList::AlgorithmsList(utils::OneToVectorMap<QString, QString> algorithm
         QLabel* categoryLabel = new QLabel(category, this);
         categoryLabel->setStyleSheet("font-weight: bold;");
         _layout->addWidget(categoryLabel, _layout->rowCount(), 0);
+        // set padding for category label
+        _layout->setRowMinimumHeight(_layout->rowCount(), 50);
 
         for (auto& algorithm : algorithms)
         {
@@ -43,7 +45,23 @@ AlgorithmsList::AlgorithmsList(utils::OneToVectorMap<QString, QString> algorithm
 
 AlgorithmsList::~AlgorithmsList()
 {
+    // delete buttons
+    for (auto it = _group->buttons().begin(); it != _group->buttons().end(); it++)
+    {
+        delete *it;
+    }
+
+    // delete labels
+    for (auto it = _layout->children().begin(); it != _layout->children().end(); it++)
+    {
+        if (dynamic_cast<QLabel*>(*it))
+        {
+            delete *it;
+        }
+    }
+
     delete _layout;
+    delete _group;
 }
 
 void AlgorithmsList::addAlgorithm(const QString& category, const QString& algorithm)
