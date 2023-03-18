@@ -27,18 +27,10 @@
 #include "AV_Utils.h"
 #include "AV_Config.h"
 
+#include <vector>
 #include <functional>
 
 _BEGIN_ALGOVIZ_MODEL
-
-/**
- * @brief Bubble Sort Algorithm
- * 
- * Bubble Sort is the simplest sorting algorithm that works by repeatedly swapping the adjacent elements if they are in wrong order.
- * This function is used to specialized in sorting QElements or any QObject. So, we must supply this class with necessary information in order to work correctly.
- * 
- * @tparam _T The type of the data to be sorted
-*/
 
 template<typename _QElement>
 class BubbleSort
@@ -51,125 +43,61 @@ public:
 	using QElement = _QElement;
 
 	/**
-	 * @brief The type of the data to be sorted
-	 * @note the supplied data must be a qt list of QElements, such that: QElementList = QList<QElement>
-	*/
-	using QElementList = QElementList<QElement>;
-
-	/**
-	 * @brief The type of the comparison function
-	*/
-	using CompareFunction = std::function<bool(QElement, QElement)>;
-
-	/**
-	 * @brief The type of the swap function
-	*/
-	using SwapFunction = std::function<void(QElement&, QElement&)>;
-	
-	/**
-	 * These two types specify the function type for animation effects during processing
-	 * BeginEffectFn is called before the processing of an element
-	 * EndEffectFn is called after the processing of an element
-	 * Examples would be, highlighting a button (QElement) and unhighlighting it after processing.
-	*/
-	using BeginEffectFn = std::function<void(QElement)>;
-	using EndEffectFn = std::function<void(QElement)>;
-
-	/**
-	 * @brief extra effect function type
-	*/
-	template<typename... Args>
-	using EffectFn = std::function<void(Args...)>;
-
-	/**
-	 * @brief Constructs a new Bubble Sort object
+	 * @brief Construct a new Bubble Sort object
+	 * 
 	 * @param data The data to be sorted
-	 * @param compare The comparison function to be used
-	 * @param swap The swap function to be used
 	*/
-	BubbleSort(QElementList data, CompareFunction compare, SwapFunction swap)
-		: _data(data), _compare(compare), _swap(swap), _beginEffect([](QElement) {}), _endEffect([](QElement) {}), _extraEffect([]() {})
+	BubbleSort(const core::QElementList<_QElement*>& data)
+		: _data(data)
 	{
 	}
 
 	/**
-	 * @brief Sets the begin effect function to be used
+	 * @brief Bubble Sort Functor
 	 * 
-	 * @param fn The function to be used
-	 * @note This function is called before the processing of an element
-	 * @note the function must be of type: void fn(QElement)
-	 * 
-	 * @see EndEffectFn
+	 * @tparam _Compare The comparison function
+	 * @tparam _Swap The swap function
+	 * @tparam _BeginEffect is called before the comparison, usually it is used to change the color of the elements or any form of highlighting them.
+	 * @tparam _EndEffect is called after the comparison, usually it is used to change the color of the elements or any form of highlighting them.
+	 * @tparam _Effect The effect function
+	 * @tparam Args The arguments to be passed to the effect function
 	*/
-	void SetBeginEffect(BeginEffectFn fn)
-	{
-		_beginEffect = fn;
-	}
-
-	/**
-	 * @brief Sets the end effect function to be used
-	 * 
-	 * @param fn The function to be used
-	 * @note This function is called after the processing of an element 
-	 * @note the function must be of type: void fn(QElement)
-	*/
-	void SetEndEffect(EndEffectFn fn)
-	{
-		_endEffect = fn;
-	}
-
-	/**
-	 * @brief Sets the extra effect function to be used
-	 * 
-	 * @param fn The function to be used
-	 * @note This function is called after the processing of an element 
-	 * @note the function must be of type: void fn(...)
-	*/
-	template<typename... Args>
-	void SetExtraEffect(EffectFn<Args...> fn)
-	{
-		_extraEffect = fn;
-	}
-
-	/**
-	 * @brief Sorts the given data using the Bubble Sort Algorithm
-	 * @param data The data to be sorted
-	 * @param compare The comparison function to be used
-	 * @param swap The swap function to be used
-	*/
-	static void Sort()
+	template<typename _Compare, typename _Swap, typename _BeginEffect, typename _EndEffect, typename _Effect, typename... Args>
+	void operator()(_Compare _compare, _Swap _swap, _BeginEffect _beginEffect, _EndEffect _endEffect, _Effect _extraEffect, Args&&... args)
 	{
 		bool _swapped = true;
 
-		for (int i = 0; i < data.size() && _swapped; i++)
+		for (int i = 0; i < _data.size() && _swapped; i++)
 		{
 			_swapped = false;
 			
-			for (int j = 0; j < data.size() - i - 1; j++)
+			for (int j = 0; j < _data.size() - i - 1; j++)
 			{
-				_beginEffect(data[j]);
-				_beginEffect(data[j + 1]);
-				_extraEffect();
+				_beginEffect(_data[j]);
+				_beginEffect(_data[j + 1]);
+				_extraEffect(std::forward<Args>(args)...);
 
-				if (compare(data[j], data[j + 1]))
+				if (_compare(_data[j], _data[j + 1]))
 				{
-					swap(data[j], data[j + 1]);
+					_swap(_data[j], _data[j + 1]);
 					_swapped = true;
 				}
 
-				_endEffect(data[j]);
-				_endEffect(data[j + 1]);
+				_endEffect(_data[j]);
+				_endEffect(_data[j + 1]);
 			}
 		}
 	}
 
 private:
-	QElementList _data;
-	CompareFunction _compare;
-	SwapFunction _swap;
-	EndEffectFn _beginEffect;
-	BeginEffectFn _endEffect;
-	EffectFn<> _extraEffect;
+	/**
+	 * @brief The data to be sorted
+	 * 
+	 * @note 
+	 * The data is stored as a QList of pointers to the elements
+	 * QElementList is a typedef for QList
+	*/
+	core::QElementList<_QElement*> _data;
 };
 
 _END_ALGOVIZ_MODEL
