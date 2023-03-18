@@ -1,0 +1,19 @@
+{
+    "MainWindow" : {
+        "title" : "",
+        "icon" : "",
+        "geometry" : {
+            "x" : 0,
+            "y" : 0,
+            "width" : 0,
+            "height" : 0
+        },
+        "state" : "Normal",
+        "maximized" : false,
+        "fullscreen" : false,
+        "visible" : true,
+        "enabled" : true,
+        "style" : "Default",
+        "styleSheet" : ""
+    }
+}

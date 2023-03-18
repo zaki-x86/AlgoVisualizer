@@ -1,0 +1,61 @@
+{
+    "MenuBar": {
+        "type" : "",
+       
+        "menus" : [
+            {
+                "id" : "home", 
+                "type" : "Icon",
+                "resource" : "",
+                "trigger" : "onHomeClick"
+            },
+            
+            {
+                "id" :"view", 
+                "type" : "Text",
+                "trigger" : "onViewClick",
+                "items" : [
+                    {
+                        "name" : "Sort Algorithms", 
+                        "type" : "CheckBox",
+                        "triggers" : "onSortAlgorithmsClick"
+                    },
+                    {
+                        "name" : "Search Algorithms", 
+                        "type" : "CheckBox",
+                        "triggers" : "onSearchAlgorithmsClick"
+                    },
+    
+                    {
+                        "name" : "Graph Algorithms", 
+                        "type" : "CheckBox"
+                    },
+                    {
+                        "name" : "ML Algorithms", 
+                        "type" : "CheckBox"
+                    }
+                ]
+            },
+    
+            {
+                "id" : "API", 
+                "type" : "Text",
+                "trigger" : "onAPIClick",
+                "items" : [
+                "Reference",
+                "Upload an algorithm"
+                ]
+            },
+            
+            {
+                "id" : "Help", 
+                "type" : "Text",
+                "trigger" : "onHelpClick",
+                "items" : [
+                    "Visit Online Guide",
+                    "About"
+                ]
+            } 
+        ]
+    }
+}

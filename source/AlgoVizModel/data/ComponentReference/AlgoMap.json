@@ -1,0 +1,66 @@
+{
+    "AlgorithmMap": {
+        "Sort": [
+            {
+                "name": "Bubble Sort",
+                "time_complexity": "O(n^2)",
+                "space_complexity": "O(1)",
+                "description": "Repeatedly swap the adjacent elements if they are in wrong order."
+            },
+            {
+                "name": "Quick Sort",
+                "time_complexity": "O(n log n)",
+                "space_complexity": "O(log n)",
+                "description": "Divide and conquer algorithm. Choose a pivot and partition the array around it."
+            },
+            {
+                "name": "Merge Sort",
+                "time_complexity": "O(n log n)",
+                "space_complexity": "O(n)",
+                "description": "Divide and conquer algorithm. Divide the unsorted list into n sublists, each containing one element."
+            }
+        ],
+        "Search": [
+            {
+                "name": "Linear Search",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "description": "Sequentially search through the list until the target element is found."
+            },
+            {
+                "name": "Binary Search",
+                "time_complexity": "O(log n)",
+                "space_complexity": "O(1)",
+                "description": "Divide and conquer algorithm. Search by repeatedly dividing in half the portion of the list that could contain the target element."
+            }
+        ],
+        "Path Finding": [
+            {
+                "name": "Dijkstra's Algorithm",
+                "time_complexity": "O((V+E) log V)",
+                "space_complexity": "O(V)",
+                "description": "Finds the shortest path between nodes in a graph."
+            },
+            {
+                "name": "A* Search Algorithm",
+                "time_complexity": "O(|E|)",
+                "space_complexity": "O(|V|)",
+                "description": "Finds the shortest path between nodes in a graph by prioritizing nodes closest to the goal."
+            }
+        ],
+        "Neural Networks": [
+            {
+                "name": "Convolutional Neural Network (CNN)",
+                "time_complexity": "O(k^2 n^2)",
+                "space_complexity": "O(k^2 n^2)",
+                "description": "A type of neural network commonly used for image classification and recognition tasks."
+            },
+            {
+                "name": "Recurrent Neural Network (RNN)",
+                "time_complexity": "O(n^2)",
+                "space_complexity": "O(n)",
+                "description": "A type of neural network that processes sequential data by using the output from previous time steps as input for the current time step."
+            }
+        ]
+    }
+}

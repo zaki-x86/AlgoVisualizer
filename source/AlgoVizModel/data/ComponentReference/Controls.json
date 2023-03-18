@@ -1,0 +1,27 @@
+{
+    "Controls" : [
+        {
+            "id" : "Play",
+            "type" : "PushButton",
+            "triggers" : "onPlayClick"
+        },
+
+        {
+            "id" : "Pause",
+            "type" : "PushButton",
+            "triggers" : "onPauseClick"
+        },
+
+        {
+            "id" : "Speed",
+            "type" : "SpinBox",
+            "triggers" : "onSpeedValueChange"
+        },
+
+        {
+            "id" : "Reset",
+            "type" : "PushButton",
+            "triggers" : "OnResetClick"
+        }
+    ]
+}
