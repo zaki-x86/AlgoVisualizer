@@ -25,8 +25,6 @@
 #include <string>
 
 #include <QApplication>
-#include "AV_Config.h"
-#include "AV_Utils.h"
 
 // --- import UI components ---
 #include "AV_AppTitle.h"
@@ -46,10 +44,15 @@
 #include "AV_SideBarLayout.h"
 #include "AV_FooterLayout.h"
 
+#include "Store/AlgoVizStore.h"
+
+#include <QDebug>
 
 int
 main(int argc, char *argv[])
 {
+	using namespace AlgoViz;
+
 	// Initialize QApp
 	QApplication app(argc, argv);
 
@@ -59,6 +62,7 @@ main(int argc, char *argv[])
 
 	// Initialize App UI
 
-
+	// -- TEST--
+	
 	return app.exec();
 }

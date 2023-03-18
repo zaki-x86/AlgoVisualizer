@@ -59,9 +59,9 @@ AppData {
 
 ```python
 AlgoMap {
-    algorithm_category [
-        {name, time_complexity, space_complexity, description}
-    ]
+    algorithm_category {
+        name {time_complexity, space_complexity, description}
+    }
 }
 ```
 
@@ -87,18 +87,16 @@ Left(or Right)BarHeader {
 ```python
 MenuBar {
     type,
-    menus [
-        {
-            id,
+    menus {
+       id {
             type,
             [resource],
             triggers,
-            items [
-                {id, type, triggers}
-            ]
-            
+            items {
+                id {type, triggers}
+            }
         }
-    ]
+    }
 }
 ```
 
@@ -154,4 +152,26 @@ MainWindow {
 
 ## `AlgoVizStore` : An interface to components data
 
+Whenever an object requests data, they will have a requet in this form:
 
+```cpp
+#include <AlgoVizStore>
+
+using namespace AlgoViz::Model;
+
+class Requester {
+public:
+    Requester : store(AlgoVizStore::initStore()) {}
+    QString getAppName() {
+        return store->AppDataModel()["AppName"].toString();
+    }
+
+    QString getHomeIcon() {
+        return store->MenuBarModel()["menus"].toObject()["home"].toObject()["resource"].toString();
+    }
+
+private:
+    AlgoVizStore* store; 
+}
+
+```

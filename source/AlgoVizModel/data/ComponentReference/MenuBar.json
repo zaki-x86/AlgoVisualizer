@@ -5,7 +5,7 @@
         "menus" : {
             "home" : {
                 "type" : "Icon",
-                "resource" : "",
+                "resource" : "path/to/icon",
                 "triggers" : "onHomeClick"
             },
 
