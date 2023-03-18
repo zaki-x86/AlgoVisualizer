@@ -149,12 +149,12 @@ if(TARGET ${PROJECT_NAME})
     target_link_libraries(
       ${PROJECT_NAME} 
       PRIVATE 
-      ${PROJECT_NAME}UI 
-      ${PROJECT_NAME}Model
-      ${PROJECT_NAME}Control
-      ${PROJECT_NAME}Core 
+      ${PROJECT_NAME}::UI 
+      ${PROJECT_NAME}::Model
+      ${PROJECT_NAME}::Control
+      ${PROJECT_NAME}::Core 
       Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Widgets
+      Qt${QT_VERSION_MAJOR}::Widgets
     )
     
     target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)  

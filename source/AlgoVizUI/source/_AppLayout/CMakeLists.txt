@@ -13,9 +13,19 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_add_library(UI_AppLayout
         ${UI_AppLayout_SOURCES}
     )
+    add_library(
+        AlgoViz::UI::Layout
+        ALIAS
+        UI_AppLayout
+    )
 else()
     add_library(UI_AppLayout
         ${UI_AppLayout_SOURCES}
+    )
+    add_library(
+        AlgoViz::UI::Layout
+        ALIAS
+        UI_AppLayout
     )
 
 endif()

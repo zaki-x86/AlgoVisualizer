@@ -1,7 +1,8 @@
-file(GLOB_RECURSE SRC_FILES include/*.cpp)
-file(GLOB_RECURSE INC_FILES include/*.h)
+file(GLOB_RECURSE SRC_FILES source/*.cpp)
+file(GLOB_RECURSE INC_FILES source/*.h)
 
 add_library(${PROJECT_NAME}Model ${SRC_FILES})
+add_library(${PROJECT_NAME}::Model ALIAS ${PROJECT_NAME}Model)
 
 target_include_directories(
     ${PROJECT_NAME}Model 
