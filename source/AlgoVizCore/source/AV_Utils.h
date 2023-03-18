@@ -23,6 +23,7 @@
 #ifndef __APP_UTILS_H
 #define __APP_UTILS_H
 
+#include <tuple>
 #include <functional>
 
 #include <QWidget>
@@ -62,7 +63,7 @@ using QStringOneToVectorMap = OneToVectorMap<QString, QString>;
 using StringVector = QVector<QString>;
 
 template<typename _QElement>
-using QElementList = QList<_QElement *>;
+using QElementList = QList<_QElement>;
 
 /**
  * @brief a function type that accepts lambdas function with no arguments and no return value
@@ -127,6 +128,7 @@ unhighlightButton(QPushButton *button, QFile _stylesheetFile);
 
 void
 delay(unsigned int _SleepDuration_ms);
+
 
 _END_ALGOVIZ_CORE
 
