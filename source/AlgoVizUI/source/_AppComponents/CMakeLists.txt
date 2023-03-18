@@ -28,7 +28,6 @@ target_link_libraries(UI_AppComponents
 target_include_directories(UI_AppComponents
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}
 )
 
 target_compile_definitions(UI_AppComponents
