@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.20)
 ##################################################################################
 
 project(
-  AlgoVisualizer
+  AlgoViz
   VERSION 0.1.0
   DESCRIPTION ""
   LANGUAGES CXX
@@ -24,7 +24,7 @@ project(
 set(MAIN_PROJECT OFF)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(MAIN_PROJECT ON)
-    message(STATUS "AlgoVisualizer is being built as a main project")
+    message(STATUS "AlgoViz is being built as a main project")
 endif()
 
 ##################################################################################
@@ -43,7 +43,7 @@ message(STATUS "Module path is set to: ${CMAKE_MODULE_PATH}")
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug")
 endif()
-message(STATUS "Started CMake for ${XSTL_TARGET} v${PROJECT_VERSION}...\n")
+message(STATUS "Started CMake for ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -97,8 +97,8 @@ message(STATUS "Detected Qt version: ${QT_VERSION_MAJOR} (${QT_VERSION})")
 # Setup target, library and executable output directories
 ##################################################################################
 
-file(GLOB_RECURSE SOURCE_FILES AlgoVisualizer/*.cpp)
-file(GLOB_RECURSE HEADER_FILES AlgoVisualizer/*.h)
+file(GLOB_RECURSE SOURCE_FILES source/*.cpp)
+file(GLOB_RECURSE HEADER_FILES source/*.h)
 
 message(STATUS "Found the following source files: ")
 foreach(SOURCE_FILE ${SOURCE_FILES})
@@ -112,46 +112,77 @@ endforeach()
 
 message(STATUS "Building ${PROJECT_NAME} v${PROJECT_VERSION}...\n")
 
+message(STATUS "Setting up ${PROJECT_NAME}Core facilities...\n")
+add_subdirectory(source/${PROJECT_NAME}Core)
+if(TARGET ${PROJECT_NAME}Core)
+  message(STATUS "Configured ${PROJECT_NAME}Core target...\n")
+endif()
+
+message(STATUS "Setting up ${PROJECT_NAME}Control...\n")
+add_subdirectory(source/${PROJECT_NAME}Control)
+if(TARGET ${PROJECT_NAME}Control)
+  message(STATUS "Configured ${PROJECT_NAME}Control target...\n")
+endif()
+
 message(STATUS "Setting up UI...\n")
-add_subdirectory(AlgoVisualizer/ui)
-if(TARGET ${PROJECT_NAME}_UI)
-  message(STATUS "Configured ${PROJECT_NAME}_UI target...\n")
-endif(TARGET ${PROJECT_NAME}_UI)
+add_subdirectory(source/${PROJECT_NAME}UI)
+if(TARGET ${PROJECT_NAME}UI)
+  message(STATUS "Configured ${PROJECT_NAME}UI target...\n")
+endif(TARGET ${PROJECT_NAME}UI)
 
-message(STATUS "Setting up ${PROJECT_NAME}_Algos...\n")
-add_subdirectory(AlgoVisualizer/algos)
-if(TARGET ${PROJECT_NAME}_ALGOS)
-  message(STATUS "Configured ${PROJECT_NAME}_ALGOS target...\n")
-endif(TARGET ${PROJECT_NAME}_ALGOS)
+message(STATUS "Setting up ${PROJECT_NAME}Model...\n")
+add_subdirectory(source/${PROJECT_NAME}Model)
+if(TARGET ${PROJECT_NAME}Model)
+  message(STATUS "Configured ${PROJECT_NAME}Model target...\n")
+endif(TARGET ${PROJECT_NAME}Model)
 
-
-message(STATUS "Setting up Tests...\n")
-add_subdirectory(AlgoVisualizer/test)
 
 message(STATUS "Setting up executable target...\n")
-add_executable(${PROJECT_NAME} AlgoVisualizer/main.cpp)
+add_executable(${PROJECT_NAME} source/main.cpp)
 
 if(TARGET ${PROJECT_NAME})
 
     target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
-    target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_UI ${PROJECT_NAME}_ALGOS Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Widgets)
-    target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)  
-    set_target_properties(
-    ${PROJECT_NAME}
-    PROPERTIES
-    LINKER_LANGUAGE CXX
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
-    )
 
-endif(TARGET ${PROJECT_NAME})
+    target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+    target_link_libraries(
+      ${PROJECT_NAME} 
+      PRIVATE 
+      ${PROJECT_NAME}UI 
+      ${PROJECT_NAME}Model
+      ${PROJECT_NAME}Control
+      ${PROJECT_NAME}Core 
+      Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Widgets
+    )
+    
+    target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)  
+    
+    if(MSVC)
+      set_target_properties(
+      ${PROJECT_NAME}
+      PROPERTIES
+      LINKER_LANGUAGE CXX
+      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+      )
+    else()
+      set_target_properties(
+      ${PROJECT_NAME}
+      PROPERTIES
+      LINKER_LANGUAGE CXX
+      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
+      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
+      )
+    endif()
+endif()
 
 if(TARGET ${PROJECT_NAME})
   message(STATUS "Configured ${PROJECT_NAME} target...\n")
-endif(TARGET ${PROJECT_NAME})
+endif()
 
 
 ##################################################################################
@@ -171,5 +202,5 @@ endif(TARGET ${PROJECT_NAME})
 if(EnableTesting)
   enable_testing()
   verbose_message("Build unit tests for the project. Tests should always be found in the test folder\n")
-  add_subdirectory(AlgoVisualizer/test)
+  add_subdirectory(test)
 endif()
