@@ -75,6 +75,7 @@ class AlgoVizStore : public QObject
     //Q_OBJECT
 
 public:
+
     // delete copy and move constructors and assign operators
     AlgoVizStore(AlgoVizStore const &) = delete;             // Copy construct
     AlgoVizStore(AlgoVizStore &&) = delete;                  // Move construct
@@ -192,9 +193,9 @@ private:
         }
         QString componentName = filename.split(".").first();
 
-        QFile file(_APP_DATA_PATH + filename + ".json");
+        QFile file(_APP_DATA_PATH + filepath);
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning("Couldn't open file.");
+            qWarning("AlgoVizModel: Couldn't open file data.");
             return QJsonObject();
         }
 
