@@ -20,40 +20,80 @@
  * SOFTWARE.
  */
 
-void
-selectionSort(QPushButton *button[])
+#ifndef __SelectionSort_H
+#define __SelectionSort_H
+
+#include "AV_Utils.h"
+#include "AV_Config.h"
+
+_BEGIN_ALGOVIZ_MODEL
+
+template<typename _QElement>
+class SelectionSort
 {
-	for (int step = 0; step < LENGTH - 1; step++)
+public:
+    /**
+     * @brief The type of the data to be sorted
+    */
+    using QElement = _QElement;
+
+	/**
+	 * @brief Construct a new Selection Sort object
+	 * 
+	 * @param data The data to be sorted
+	*/
+	SelectionSort(const core::QElementList<_QElement*>& data)
+		: _data(data)
 	{
-		int min_idx = step;
-
-		for (int i = step + 1; i < LENGTH; i++)
-		{
-			highlightButton(button[i]);
-			highlightButton(button[step]);
-
-			delay();
-
-			if (_data[i] < _data[min_idx])
-			{
-				min_idx = i;
-			}
-
-			unhighlightButton(button[step]);
-			unhighlightButton(button[i]);
-		}
-
-		highlightButton(button[min_idx]);
-		highlightButton(button[step]);
-
-		// put min at the correct position
-		swap(&_data[min_idx], &_data[step]);
-		setButtonValue(button[min_idx], _data[min_idx]);
-		setButtonValue(button[step], _data[step]);
-
-		delay();
-
-		unhighlightButton(button[min_idx]);
-		unhighlightButton(button[step]);
 	}
-}
+
+    /**
+     * @brief Selection Sort Functor
+     * 
+     * @tparam _Compare The comparison function
+     * @tparam _Swap The swap function
+     * @tparam _BeginEffect is called before the comparison, usually it is used to change the color of the elements or any form of highlighting them.
+     * @tparam _EndEffect is called after the comparison, usually it is used to change the color of the elements or any form of highlighting them.
+     * @tparam _Effect The effect function
+     * @tparam Args The arguments to be passed to the effect function
+    */
+    template<typename _Compare, typename _Swap, typename _BeginEffect, typename _EndEffect, typename _Effect, typename... Args>
+    void operator()(_Compare _compare, _Swap _swap, _BeginEffect _beginEffect, _EndEffect _endEffect, _Effect _extraEffect, Args&&... args)
+    {
+        for (int i = 0; i < _data.size() - 1; i++)
+        {
+            int minIndex = i;
+            _beginEffect(_data[minIndex]);
+
+            for (int j = i + 1; j < _data.size(); j++)
+            {
+                _beginEffect(_data[j]);
+                _extraEffect(std::forward<Args>(args)...);
+
+                if (_compare(_data[j], _data[minIndex]))
+                    minIndex = j;
+            
+                 _endEffect(_data[j]);
+            }
+
+            if (minIndex != i)
+                _swap(_data[i], _data[minIndex]);
+
+            _endEffect(_data[i]);
+        }
+    }
+
+private:
+    /**
+     * @brief The data to be sorted
+     * 
+     * @note 
+     * The data is stored as a QList of pointers to the elements
+     * QElementList is a typedef for QList
+    */
+    core::QElementList<_QElement*> _data;
+};
+
+_END_ALGOVIZ_MODEL
+
+#endif // __SelectionSort_H
