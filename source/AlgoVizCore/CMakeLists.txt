@@ -1,7 +1,7 @@
 # Export all symbols
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-file(GLOB_RECURSE AppUtils_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE AppUtils_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 
 message(STATUS "${PROJECT_NAME}Core: ${AppUtils_SRCS}")
 
@@ -27,7 +27,8 @@ target_compile_definitions(
 target_include_directories(
     AlgoVizCore
     PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/source
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/include
 )
 
 target_link_libraries(

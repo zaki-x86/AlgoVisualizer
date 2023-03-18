@@ -37,8 +37,8 @@
 // ========= Macros for the namespaces of the application ========
 // ===============================================================
 
-#define _BEGIN_ALGOVIZ_UI_UTILS namespace AlgoViz::ui::utils {
-#define _END_ALGOVIZ_UI_UTILS }
+#define _BEGIN_ALGOVIZ_CORE namespace AlgoViz::core {
+#define _END_ALGOVIZ_CORE }
 
 #define _BEGIN_ALGOVIZ_UI namespace AlgoViz::ui {
 #define _END_ALGOVIZ_UI }

@@ -22,7 +22,7 @@
 
 #include "AV_Utils.h"
 
-_BEGIN_ALGOVIZ_UI_UTILS
+_BEGIN_ALGOVIZ_CORE
 
 QString readStyleSheet(QString _fileName)
 {
@@ -85,4 +85,4 @@ delay(unsigned int _SleepDuration_ms)
 		QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
 
-_END_ALGOVIZ_UI_UTILS
+_END_ALGOVIZ_CORE

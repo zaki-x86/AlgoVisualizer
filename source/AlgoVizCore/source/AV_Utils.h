@@ -38,10 +38,13 @@
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
+#include <QTimer>
+#include <QThread>
+#include <QList>
 
 #include "AV_Config.h"
 
-_BEGIN_ALGOVIZ_UI_UTILS
+_BEGIN_ALGOVIZ_CORE
 
 
 // =================================
@@ -57,6 +60,9 @@ using OneToVectorMap = QMap<_T1, QVector<_T2>>;
 using QStringOneToVectorMap = OneToVectorMap<QString, QString>;
 
 using StringVector = QVector<QString>;
+
+template<typename _QElement>
+using QElementList = QList<_QElement *>;
 
 /**
  * @brief a function type that accepts lambdas function with no arguments and no return value
@@ -122,6 +128,6 @@ unhighlightButton(QPushButton *button, QFile _stylesheetFile);
 void
 delay(unsigned int _SleepDuration_ms);
 
-_END_ALGOVIZ_UI_UTILS
+_END_ALGOVIZ_CORE
 
 #endif
