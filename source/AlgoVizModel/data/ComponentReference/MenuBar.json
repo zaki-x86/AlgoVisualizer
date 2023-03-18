@@ -2,60 +2,69 @@
     "MenuBar": {
         "type" : "",
        
-        "menus" : [
-            {
-                "id" : "home", 
+        "menus" : {
+            "home" : {
                 "type" : "Icon",
                 "resource" : "",
                 "triggers" : "onHomeClick"
             },
-            
-            {
-                "id" :"view", 
+
+            "view" : {
                 "type" : "Text",
                 "triggers" : "onViewClick",
-                "items" : [
-                    {
-                        "id" : "Sort Algorithms", 
+                "items" : {
+                    "Sort Algorithms" : {
                         "type" : "CheckBox",
-                        "triggers" : "onSortAlgorithmsClick"
+                        "triggers" : "onSortClick"
                     },
-                    {
-                        "id" : "Search Algorithms", 
+                    "Search Algorithms" : {
                         "type" : "CheckBox",
-                        "triggers" : "onSearchAlgorithmsClick"
+                        "triggers" : "onSearchClick"
                     },
-    
-                    {
-                        "id" : "Graph Algorithms", 
-                        "type" : "CheckBox"
+                    "Graph Algorithms" : {
+                        "type" : "CheckBox",
+                        "triggers" : "onGraphClick"
                     },
-                    {
-                        "id" : "ML Algorithms", 
-                        "type" : "CheckBox"
+                    "Data Structures" : {
+                        "type" : "CheckBox",
+                        "triggers" : "onDSClick"
+                    },
+                    "ML Algorithms" : {
+                        "type" : "CheckBox",
+                        "triggers" : "onMLClick"
                     }
-                ]
+                }
             },
-    
-            {
-                "id" : "API", 
+
+            "API" : {
                 "type" : "Text",
                 "triggers" : "onAPIClick",
-                "items" : [
-                "Reference",
-                "Upload an algorithm"
-                ]
+                "items" : {
+                    "Reference" : {
+                        "type" : "Text",
+                        "triggers" : "onReferenceClick"
+                    },
+                    "Upload an algorithm" : {
+                        "type" : "Text",
+                        "triggers" : "onUploadClick"
+                    }
+                }
             },
-            
-            {
-                "id" : "Help", 
+
+            "Help" : {
                 "type" : "Text",
                 "triggers" : "onHelpClick",
-                "items" : [
-                    "Visit Online Guide",
-                    "About"
-                ]
-            } 
-        ]
+                "items" : {
+                    "Visit Online Guide" : {
+                        "type" : "Text",
+                        "triggers" : "onVisitClick"
+                    },
+                    "About" : {
+                        "type" : "Text",
+                        "triggers" : "onAboutClick"
+                    }
+                }
+            }
+        }   
     }
 }
