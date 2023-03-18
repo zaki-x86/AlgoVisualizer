@@ -7,7 +7,7 @@ add_library(${PROJECT_NAME}::Model ALIAS ${PROJECT_NAME}Model)
 target_include_directories(
     ${PROJECT_NAME}Model 
     PUBLIC 
-    include
+    ${CMAKE_CURRENT_SOURCE_DIR}/source
 )
 
 set_target_properties(
