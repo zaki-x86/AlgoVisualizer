@@ -3,7 +3,7 @@
 ## Overview of The GUI
 
 - The entire app GUI is designed as a library called `AlgoVisualizer_UI` to be linked with the app main executable. The executable will import the necessary GUI facilities frpm `AlgoVisualizer_UI` and will use it to initialize and launch the app.
-- The `AlgoVisualizer_UI` library is divided into 3 libraries: `UI_AppCore`, `UI_AppComponents`, `UI_AppLayout`
+- The `AlgoVisualizer_UI` library is divided into 3 libraries: `AlgoVizCore`, `UI_AppComponents`, `UI_AppLayout`
 
 ### Overview of GUI Layout and Components
 
@@ -17,7 +17,7 @@
 
 > All GUI components are heap allocated. Later on, we may research how to eliminate memory allocation or at least reduce it.
 
-### GUI Core Utilities: `UI_AppCore`
+### GUI Core Utilities: `AlgoVizCore`
 
 This library provides core utilities and configurations that are global to the entire UI.
 Check the in-source documentation for both files `AV_Config.h` and `AV_Utils.h`
@@ -206,7 +206,7 @@ void main (int argc, char** argv) {
     // Initialize App components
     AlgoViz::ui::AppTitle av_appTitle = new AppTitle;
     AlgoViz::ui::MenuBar av_menuBar = new MenuBar;
-    AlgoViz::ui::AlgorithmsList av_algos = new AlgorithmsList;
+    AlgoViz::ui::AlgoMap av_algos = new AlgoMap;
     AlgoViz::ui::Controls av_controls = new Controls;
     AlgoViz::ui::PlayGroundTitle av_playgroundTitle = new PlayGroundTitle;
     AlgoViz::ui::PlayGround av_playground = new PlayGround;
