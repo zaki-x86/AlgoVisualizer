@@ -7,31 +7,31 @@
                 "id" : "home", 
                 "type" : "Icon",
                 "resource" : "",
-                "trigger" : "onHomeClick"
+                "triggers" : "onHomeClick"
             },
             
             {
                 "id" :"view", 
                 "type" : "Text",
-                "trigger" : "onViewClick",
+                "triggers" : "onViewClick",
                 "items" : [
                     {
-                        "name" : "Sort Algorithms", 
+                        "id" : "Sort Algorithms", 
                         "type" : "CheckBox",
                         "triggers" : "onSortAlgorithmsClick"
                     },
                     {
-                        "name" : "Search Algorithms", 
+                        "id" : "Search Algorithms", 
                         "type" : "CheckBox",
                         "triggers" : "onSearchAlgorithmsClick"
                     },
     
                     {
-                        "name" : "Graph Algorithms", 
+                        "id" : "Graph Algorithms", 
                         "type" : "CheckBox"
                     },
                     {
-                        "name" : "ML Algorithms", 
+                        "id" : "ML Algorithms", 
                         "type" : "CheckBox"
                     }
                 ]
@@ -40,7 +40,7 @@
             {
                 "id" : "API", 
                 "type" : "Text",
-                "trigger" : "onAPIClick",
+                "triggers" : "onAPIClick",
                 "items" : [
                 "Reference",
                 "Upload an algorithm"
@@ -50,7 +50,7 @@
             {
                 "id" : "Help", 
                 "type" : "Text",
-                "trigger" : "onHelpClick",
+                "triggers" : "onHelpClick",
                 "items" : [
                     "Visit Online Guide",
                     "About"
