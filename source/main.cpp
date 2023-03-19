@@ -27,26 +27,36 @@
 #include <QApplication>
 
 // --- import UI components ---
-#include "AV_AppTitle.h"
-#include "AV_AppDescription.h"
+
+
 #include "AV_MenuBar.h"
 #include "AV_AlgoMap.h"
 #include "AV_Controls.h"
 #include "AV_SimulationPlayGroundHeader.h"
 #include "AV_SimulationPlayGround.h"
 #include "AV_StatusBar.h"
-#include "AV_CopyRightLabel.h"
+
 
 // --- import UI layout ---
 #include "AV_WindowLayout.h"
 #include "AV_HeaderLayout.h"
 #include "AV_CentralLayout.h"
 #include "AV_SideBarLayout.h"
-#include "AV_FooterLayout.h"
 
+
+
+// *** delete this later
+#include "AV_Config.h"
 #include "Store/AlgoVizStore.h"
-
+#include "Algos/Sort/BubbleSort.h"
+#include "Algos/Sort/SelectionSort.h"
 #include <QDebug>
+#include <QPushButton>
+#include <QHBoxLayout>
+// *************************
+
+// implement a swap function that takes two push buttons as input and swap the text values within them
+
 
 int
 main(int argc, char *argv[])
@@ -62,7 +72,12 @@ main(int argc, char *argv[])
 
 	// Initialize App UI
 
-	// -- TEST--
+	// -- TEST CODE (TEMPORARY SECTION) --
+	// debug a message when status bar sends initialize() signal
+	ui::StatusBar *statusBar = new ui::StatusBar();
+	QObject::connect(statusBar, &ui::StatusBar::initialized,[]() {
+		qDebug() << "Status bar initialized";
+	});
 	
 	return app.exec();
 }

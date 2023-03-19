@@ -21,8 +21,8 @@
  */
 
 /**
- * @file WindowGrid.cpp
- * @brief WindowGrid class implementation
+ * @file MainWindow.cpp
+ * @brief MainWindow class implementation
  * @author M Zaki <zaki.x86@gmail.com>
  * @date 2023-12-3
  * @version 1.0
@@ -33,139 +33,90 @@
 
 _BEGIN_ALGOVIZ_UI
 
-WindowGrid& WindowGrid::init(HeaderLayout* _header, CentralLayout* _central, SideBarLayout* _leftBar, SideBarLayout* _rightBar, FooterLayout* _footer, QWidget* parent)
+MainWindow& MainWindow::init(QWidget* parent)
 {
-    static WindowGrid _instance(_header, _central, _leftBar, _rightBar, _footer, parent);
+    static MainWindow _instance(parent);
     return _instance;
 }
 
-WindowGrid::WindowGrid(HeaderLayout* header, CentralLayout* central, SideBarLayout* leftBar, SideBarLayout* rightBar, FooterLayout* footer, QWidget* parent) 
+MainWindow::MainWindow(QWidget* parent) 
 : _mainWindowLayout (new QGridLayout())
 , QWidget(parent)
-, _header(header)
-, _central(central)
-, _leftBar(leftBar)
-, _rightBar(rightBar)
-, _footer(footer)
 {
     setLayout(_mainWindowLayout);
-    _mainWindowLayout->setContentsMargins(0, 0, 0, 0);
+    _mainWindowLayout->setContentsMargins(5, 5, 5, 5);
     _mainWindowLayout->setSpacing(0);
+
+    _mainWindowLayout->addWidget(new SideBarLayout, 0, 0, 1, 1);
+    _mainWindowLayout->addWidget(new SideBarLayout, 0, 2, 1, 1);
+    _mainWindowLayout->addWidget(new CentralLayout, 0, 1, 1, 1);         
     
-    // if every section is defined_mainWindowLayout->addWidget(_footer, 2, 0, 1, 3);
-    if(_header && _central && _leftBar && _rightBar && _footer) {
-        _mainWindowLayout->addWidget(_header, 0, 0, 1, 3);
-        _mainWindowLayout->addWidget(_leftBar, 1, 0, 1, 1);
-        _mainWindowLayout->addWidget(_rightBar, 1, 2, 1, 1);
-        _mainWindowLayout->addWidget(_central, 1, 1, 1, 1);
-        
-        _mainWindowLayout->setColumnStretch(0, 1);
-        _mainWindowLayout->setColumnStretch(1, 4);
-        _mainWindowLayout->setColumnStretch(2, 1);
-        
-        _mainWindowLayout->setRowStretch(0, 1);
-        _mainWindowLayout->setRowStretch(1, 4);
-        _mainWindowLayout->setRowStretch(2, 1);
-    }
+    _mainWindowLayout->setColumnStretch(1, 4);
 
-    // if no header is provided, then the window will only have 2 rows, 3 columns
-    else if(_central && _leftBar && _rightBar && _footer) {
-        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
-        _mainWindowLayout->addWidget(_rightBar, 0, 2, 1, 1);
-        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
-        _mainWindowLayout->addWidget(_footer, 1, 0, 1, 3);
-
-        _mainWindowLayout->setColumnStretch(0, 1);
-        _mainWindowLayout->setColumnStretch(1, 4);
-        _mainWindowLayout->setColumnStretch(2, 1);
-        
-        _mainWindowLayout->setRowStretch(0, 4);
-        _mainWindowLayout->setRowStretch(1, 1);
-    }
-
-    // if no header and footer is provided, then the window will only have 1 row, 3 columns
-    else if(_central && _leftBar && _rightBar) {
-        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
-        _mainWindowLayout->addWidget(_rightBar, 0, 2, 1, 1);
-        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
-
-        _mainWindowLayout->setColumnStretch(0, 1);
-        _mainWindowLayout->setColumnStretch(1, 4);
-        _mainWindowLayout->setColumnStretch(2, 1);
-        
-        _mainWindowLayout->setRowStretch(0, 1);
-    }
-    // if no header, footer and right bar is provided, then the window will only have 1 row, 2 columns
-    else if(_central && _leftBar) {
-        _mainWindowLayout->addWidget(_leftBar, 0, 0, 1, 1);
-        _mainWindowLayout->addWidget(_central, 0, 1, 1, 1);
-
-        _mainWindowLayout->setColumnStretch(0, 1);
-        _mainWindowLayout->setColumnStretch(1, 4);        
-    }
-    // if no header, footer, right bar and left bar is provided, then the window will only have 1 row, 1 column
-    else if(_central) {
-        _mainWindowLayout->addWidget(_central, 0, 0, 1, 1);
-
-        _mainWindowLayout->setColumnStretch(0, 1);
-        
-        _mainWindowLayout->setRowStretch(0, 1);
-    }    
+    _adjustSideBarsLayout();
+    _adjustCentralLayout();
 }
 
-WindowGrid::~WindowGrid()
+MainWindow::~MainWindow()
 {
+    // delete all items in the layout
+    for (int i = 0; i < _mainWindowLayout->count(); i++)
+    {
+        delete _mainWindowLayout->itemAt(i);
+    }
+    
     delete _mainWindowLayout;
 }
 
-HeaderLayout* WindowGrid::header() const
+CentralLayout* MainWindow::central() const
 {
-    return _header;
+    // get the central layout from the grid layout
+    return static_cast<CentralLayout*>(_mainWindowLayout->itemAtPosition(0, 1)->widget());
 }
 
-void WindowGrid::setHeader(HeaderLayout* header)
+void MainWindow::setCentral(CentralLayout* central)
 {
-    _header = header;
+    // set the central layout in the grid layout, remove the old one if it exists
+    if (_mainWindowLayout->itemAtPosition(0, 1))
+    {
+        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 1)->widget());
+    }
+    _mainWindowLayout->addWidget(central, 0, 1, 1, 1);
+
+    _adjustCentralLayout();
 }
 
-CentralLayout* WindowGrid::central() const
+SideBarLayout* MainWindow::leftBar() const
 {
-    return _central;
+    return static_cast<SideBarLayout*>(_mainWindowLayout->itemAtPosition(0, 0)->widget());
 }
 
-void WindowGrid::setCentral(CentralLayout* central)
+void MainWindow::setLeftBar(SideBarLayout* leftBar)
 {
-    _central = central;
+    // set the left sidebar layout in the grid layout, remove the old one if it exists
+    if (_mainWindowLayout->itemAtPosition(0, 0))
+    {
+        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 0)->widget());
+    }
+    _mainWindowLayout->addWidget(leftBar, 0, 0, 1, 1);
+    _adjustSideBarsLayout();
 }
 
-SideBarLayout* WindowGrid::leftBar() const
+SideBarLayout* MainWindow::rightBar() const
 {
-    return _leftBar;
+    return static_cast<SideBarLayout*>(_mainWindowLayout->itemAtPosition(0, 2)->widget());
 }
 
-void WindowGrid::setLeftBar(SideBarLayout* leftBar)
+void MainWindow::setRightBar(SideBarLayout* rightBar)
 {
-    _leftBar = leftBar;
+    // set the right sidebar layout in the grid layout, remove the old one if it exists
+    if (_mainWindowLayout->itemAtPosition(0, 2))
+    {
+        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 2)->widget());
+    }
+    _mainWindowLayout->addWidget(rightBar, 0, 2, 1, 1);
+    _adjustSideBarsLayout();
 }
 
-SideBarLayout* WindowGrid::rightBar() const
-{
-    return _rightBar;
-}
-
-void WindowGrid::setRightBar(SideBarLayout* rightBar)
-{
-    _rightBar = rightBar;
-}
-
-FooterLayout* WindowGrid::footer() const
-{
-    return _footer;
-}
-
-void WindowGrid::setFooter(FooterLayout* footer)
-{
-    _footer = footer;
-}
 
 _END_ALGOVIZ_UI

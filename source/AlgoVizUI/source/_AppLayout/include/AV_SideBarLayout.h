@@ -55,7 +55,7 @@ _BEGIN_ALGOVIZ_UI
 class SideBarHeader : public QWidget
 {
 public:
-	explicit SideBarHeader(const QString &title, const QString& desc, QWidget *parent = nullptr);
+	explicit SideBarHeader(QWidget *parent = nullptr);
 
 	~SideBarHeader();
 
@@ -73,14 +73,12 @@ public:
 
 private:
 	QGridLayout *_layout;
-	QLabel *_titleLabel;
-	QLabel *_descriptionLabel;
 };
 
 class SideBarLayout : public QWidget
 {
 public:
-	explicit SideBarLayout(SideBarHeader* header, QWidget *parent = nullptr);
+	explicit SideBarLayout(QWidget *parent = nullptr);
 
 	~SideBarLayout();
 
@@ -88,20 +86,12 @@ public:
 	sideBarHeader() const;
 
 	void
-	setSideBarHeader(SideBarHeader *sideBarHeader);
+	setSideBarHeader(QString title, QString description);
 
-	// Get a list of sections within the side bar
-	QList<QWidget *>
-	sections() const;
-
-	// Add a new section to the side bar
-	void
-	addSection(QWidget *section);
+	void addWidget(QWidget *widget);
 
 private:
 	QGridLayout *_layout;
-	SideBarHeader *_sideBarHeader;
-	QList<QWidget *> _sections;
 };
 
 _END_ALGOVIZ_UI

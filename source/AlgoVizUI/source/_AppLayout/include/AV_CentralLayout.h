@@ -51,25 +51,23 @@ _BEGIN_ALGOVIZ_UI
 class CentralLayout : public QWidget
 {
 public:
-	explicit CentralLayout(SimulationPlayGroundHeader *simulationPlayGroundHeader, SimulationPlayGround *simulationPlayGround, QWidget *parent = nullptr);
+	explicit CentralLayout(QWidget *parent = nullptr);
 	~CentralLayout();
-
-	SimulationPlayGround *
-	simulationPlayGround() const;
-
-	void
-	setSimulationPlayGround(SimulationPlayGround *playGround);
 
 	SimulationPlayGroundHeader *
 	simulationPlayGroundHeader() const;
 
 	void
 	setSimulationPlayGroundHeader(SimulationPlayGroundHeader *playGroundHeader);
+	
+	SimulationPlayGround *
+	simulationPlayGround() const;
+
+	void
+	setSimulationPlayGround(SimulationPlayGround *playGround);
 
 private:
 	QGridLayout *_layout;
-	SimulationPlayGroundHeader *_simulationPlayGroundHeader;
-	SimulationPlayGround *_simulationPlayGround;
 };
 
 _END_ALGOVIZ_UI

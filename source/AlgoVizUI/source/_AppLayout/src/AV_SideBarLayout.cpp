@@ -33,90 +33,110 @@
 
 _BEGIN_ALGOVIZ_UI
 
-SideBarHeader::SideBarHeader(const QString& title, const QString& desc, QWidget* parent)
+SideBarHeader::SideBarHeader(QWidget* parent)
 : QWidget(parent)
 , _layout(new QGridLayout())
-, _titleLabel(new QLabel(title))
-, _descriptionLabel(new QLabel(desc))
 {
 	setLayout(_layout);
 	_layout->setContentsMargins(15, 15, 15, 15);
 	_layout->setSpacing(0);
 
-	_titleLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
-	_descriptionLabel->setStyleSheet("font-size: 12px;");
-
-	_layout->addWidget(_titleLabel, 0, 0, 1, 1, Qt::AlignTop);
-	_layout->addWidget(_descriptionLabel, 1, 0, 1, 1, Qt::AlignTop);
+	_layout->addWidget(new QLabel, 0, 0, 1, 1, Qt::AlignTop);
+	_layout->addWidget(new QLabel, 1, 0, 1, 1, Qt::AlignTop);
+	
 }
 
 SideBarHeader::~SideBarHeader()
 {
 	delete _layout;
-	delete _titleLabel;
-	delete _descriptionLabel;
+	
+	// delete title label
+	QLayoutItem* item = _layout->itemAtPosition(0, 0);
+	if (item != nullptr) {
+		_layout->removeItem(item);
+		delete item->widget();
+		delete item;
+	}
+
+	// delete description label
+	item = _layout->itemAtPosition(1, 0);
+	if (item != nullptr) {
+		_layout->removeItem(item);
+		delete item->widget();
+		delete item;
+	}
 }
 
 QString SideBarHeader::titleLabel() const {
-	return _titleLabel->text();
+	return static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->text();
 }
 
 void SideBarHeader::setTitleLabel(const QString& titleLabel)
 {
-	_titleLabel->setText(titleLabel);
+	static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->setText(titleLabel);
 }
 
 QString SideBarHeader::descriptionLabel() const {
-	return _descriptionLabel->text();
+	return static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->text();
 }
 
 void SideBarHeader::setDescriptionLabel(const QString& descriptionLabel)
 {
-	_descriptionLabel->setText(descriptionLabel);
+	static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->setText(descriptionLabel);
 }
 
 
 // ----------------------------------------------
 
 
-SideBarLayout::SideBarLayout(SideBarHeader* header, QWidget* parent)
+SideBarLayout::SideBarLayout(QWidget* parent)
 : QWidget(parent)
 , _layout(new QGridLayout())
-, _sideBarHeader(nullptr)
-, _sections()
 {
 	setLayout(_layout);
 	_layout->setContentsMargins(10, 10, 10, 10);
 	_layout->setSpacing(0);
 
-	_sections.append(header);
-	_layout->addWidget(header, 0, 0, 1, 1, Qt::AlignTop);
-	_layout->setRowStretch(0, 0);
+	_layout->addWidget(new SideBarHeader, 0, 0, 1, 1, Qt::AlignTop);
+	_layout->setRowStretch(0, 1);
+
+	//TODO set relative minumum height to the header
+	_layout->itemAtPosition(0, 0)->widget()->setMinimumHeight(50);
 }
 
 SideBarLayout::~SideBarLayout()
 {
+	// Loop through all items in the layout and delete them
+	for (int i = 0; i < _layout->count(); i++) {
+		QLayoutItem* item = _layout->itemAt(i);
+		if (item != nullptr) {
+			_layout->removeItem(item);
+			delete item->widget();
+			delete item;
+		}
+	}
+	
 	delete _layout;
 }
 
 SideBarHeader* SideBarLayout::sideBarHeader() const {
-	return _sideBarHeader;
+	return static_cast<SideBarHeader*>(_layout->itemAtPosition(0, 0)->widget());
 }
 
-void SideBarLayout::setSideBarHeader(SideBarHeader* sideBarHeader)
+void SideBarLayout::setSideBarHeader(QString title, QString description)
 {
-	_sideBarHeader = sideBarHeader;
+	sideBarHeader()->setTitleLabel(title);
+	sideBarHeader()->setDescriptionLabel(description);
 }
 
-QList<QWidget*> SideBarLayout::sections() const {
-	return _sections;
-}
-
-void SideBarLayout::addSection(QWidget* section)
+void SideBarLayout::addWidget(QWidget* widget)
 {
-	_sections.append(section);
-	_layout->addWidget(section, _sections.size(), 0, 1, 1);
-	_layout->setRowStretch(_sections.size(), 1);
+	_layout->addWidget(widget, _layout->rowCount(), 0, 1, 1, Qt::AlignTop);
+	_layout->setRowStretch(_layout->rowCount(), 1);
+
+	// set minimum height to be 5 times the height of the header
+	_layout->itemAtPosition(_layout->rowCount() - 1, 0)->widget()->setMinimumHeight(5 * sideBarHeader()->height());
 }
+
 
 _END_ALGOVIZ_UI

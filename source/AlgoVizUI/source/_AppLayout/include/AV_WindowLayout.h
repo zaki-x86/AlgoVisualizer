@@ -48,7 +48,7 @@
 #include "AV_CentralLayout.h"
 #include "AV_SideBarLayout.h"
 #include "AV_HeaderLayout.h"
-#include "AV_FooterLayout.h"
+
 #include "AV_CentralLayout.h"
 
 
@@ -60,22 +60,19 @@ _BEGIN_ALGOVIZ_UI
 /**
  * Main window grid skeleton
 */
-class WindowGrid : public QWidget
+class MainWindow : public QWidget
 {
+    Q_OBJECT
 private:
-    WindowGrid(HeaderLayout* _header, CentralLayout* _central, SideBarLayout* _leftBar, SideBarLayout* _rightBar, FooterLayout* _footer, QWidget* parent = nullptr);
-    ~WindowGrid();
+    MainWindow(QWidget* parent = nullptr);
+    ~MainWindow();
 
 public:
-    static WindowGrid& init(HeaderLayout* _header, CentralLayout* _central, SideBarLayout* _leftBar, SideBarLayout* _rightBar, FooterLayout* _footer, QWidget* parent = nullptr);
+    static MainWindow& init(QWidget* parent = nullptr);
 
     // delete copy constructor and assignment operator
-    WindowGrid(const WindowGrid&) = delete;
-    WindowGrid& operator=(const WindowGrid&) = delete;
-    
-
-    HeaderLayout* header() const; 
-    void setHeader(HeaderLayout* header);
+    MainWindow(const MainWindow&) = delete;
+    MainWindow& operator=(const MainWindow&) = delete;
 
     CentralLayout* central() const;
     void setCentral(CentralLayout* central);
@@ -86,16 +83,24 @@ public:
     SideBarLayout* rightBar() const;
     void setRightBar(SideBarLayout* rightBar);
     
-    FooterLayout* footer() const;
-    void setFooter(FooterLayout* footer);
-    
+signals:
+    void initialized();
 private:
     QGridLayout* _mainWindowLayout;
-    HeaderLayout* _header;
-    CentralLayout* _central;
-    SideBarLayout* _leftBar;
-    SideBarLayout* _rightBar;
-    FooterLayout* _footer;
+
+    void _adjustSideBarsLayout(){
+        // sidebars are of equal width
+        _mainWindowLayout->setColumnStretch(0, 1);
+        _mainWindowLayout->setColumnStretch(2, 1);   
+    }
+
+    void _adjustCentralLayout(){
+        // central layout is of equal width
+        _mainWindowLayout->setColumnStretch(1, 4);
+
+        // set minumum width for the central section to takeup as much space as 4 times the right and left sidebars
+        _mainWindowLayout->setColumnMinimumWidth(1, 4 * _mainWindowLayout->columnMinimumWidth(0)); 
+    }
 };
 
 _END_ALGOVIZ_UI

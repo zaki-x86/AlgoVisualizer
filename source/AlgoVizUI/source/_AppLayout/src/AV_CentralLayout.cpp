@@ -33,44 +33,54 @@
 
 _BEGIN_ALGOVIZ_UI
 
-CentralLayout::CentralLayout(
-	SimulationPlayGroundHeader *simulationPlayGroundHeader, SimulationPlayGround *simulationPlayGround, QWidget *parent)
-	: QWidget(parent), _layout(new QGridLayout), _simulationPlayGroundHeader(simulationPlayGroundHeader),
-	  _simulationPlayGround(simulationPlayGround)
+CentralLayout::CentralLayout(QWidget *parent)
+	: QWidget(parent), _layout(new QGridLayout)
 {
 	setLayout(_layout);
-	_layout->setContentsMargins(0, 0, 0, 0);
+	_layout->setContentsMargins(5, 5, 5, 5);
 	_layout->setSpacing(0);
 
-	_layout->addWidget(_simulationPlayGroundHeader, 0, 0, 1, 1, Qt::AlignCenter);
+	_layout->addWidget(new SimulationPlayGroundHeader, 0, 0, 1, 1, Qt::AlignCenter);
+	_layout->setRowStretch(0, 1);
 
-	_layout->addWidget(_simulationPlayGround, 1, 0, 1, 1, Qt::AlignCenter);
+	_layout->addWidget(new SimulationPlayGround, 1, 0, 1, 1, Qt::AlignCenter);
+	_layout->setRowStretch(1, 10);
 }
 
-CentralLayout::~CentralLayout() {}
+CentralLayout::~CentralLayout() {
+	auto children = this->findChildren<QWidget *>();
+	for (auto child : children) {
+		delete child;
+	}
+	delete _layout;
+}
 
 SimulationPlayGround *
 CentralLayout::simulationPlayGround() const
 {
-	return _simulationPlayGround;
+	return (SimulationPlayGround *)_layout->itemAtPosition(1, 0)->widget();
 }
 
 void
 CentralLayout::setSimulationPlayGround(SimulationPlayGround *playGround)
 {
-	_simulationPlayGround = playGround;
+	_layout->removeItem(_layout->itemAtPosition(1, 0));
+	_layout->addWidget(playGround, 1, 0, 1, 1, Qt::AlignCenter);
+	_layout->setRowStretch(1, 10);
 }
 
 SimulationPlayGroundHeader *
 CentralLayout::simulationPlayGroundHeader() const
 {
-	return _simulationPlayGroundHeader;
+	return (SimulationPlayGroundHeader *)_layout->itemAtPosition(0, 0)->widget();
 }
 
 void
 CentralLayout::setSimulationPlayGroundHeader(SimulationPlayGroundHeader *playGroundHeader)
 {
-	_simulationPlayGroundHeader = playGroundHeader;
+	_layout->removeItem(_layout->itemAtPosition(0, 0));
+	_layout->addWidget(playGroundHeader, 0, 0, 1, 1, Qt::AlignCenter);
+	_layout->setRowStretch(0, 1);
 }
 
 _END_ALGOVIZ_UI
