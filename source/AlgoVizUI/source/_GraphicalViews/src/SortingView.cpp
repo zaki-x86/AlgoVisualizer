@@ -28,7 +28,7 @@
  * @date 2023-03-12
  */
 
-#include "SimulationViews\AV_SortingView.h"
+#include "SortingView.h"
 
 _BEGIN_ALGOVIZ_UI
 
