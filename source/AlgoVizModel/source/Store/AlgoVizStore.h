@@ -89,6 +89,11 @@ public:
     static AlgoVizStore *initStore();
 
     /**
+     * @brief runs the store to keep listening for any data updated
+    */
+   void run();
+
+    /**
      * @brief Get the App Data object
      * @return QJsonObject 
      * 

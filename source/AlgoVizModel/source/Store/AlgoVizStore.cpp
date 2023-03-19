@@ -78,5 +78,9 @@ QJsonObject AlgoVizStore::SimulationPlayGroundHeaderModel() {
     return _getComponentData("ComponentReference/SimulationPlayGroundHeader.json");
 }
 
+void AlgoVizStore::run()
+{
+    // TODO: Implement this
+}
 
 _END_ALGOVIZ_MODEL
