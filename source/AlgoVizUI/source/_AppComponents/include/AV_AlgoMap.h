@@ -50,8 +50,18 @@
 
 _BEGIN_ALGOVIZ_UI
 
+/**
+ * @brief Algorithms list
+ * 
+ * This component is used to display a list of algorithms, and sends the controller the following signals:
+ * 
+ * - initialized: when the component is initialized
+ * - algorithmsButtons::buttonClicked: when an algorithm is selected
+ * - algorithmAdded : when an algorithm is added to the list
+*/
 class AlgoMap : public QWidget
 {
+    Q_OBJECT
 public:
     /**
      * @brief Construct a new Algorithms List object
@@ -61,7 +71,7 @@ public:
      * 
      * @note The map of algorithms is a map of categories and a vector of algorithms
     */
-    explicit AlgoMap(core::OneToVectorMap<QString, QString> algorithms, QWidget* parent = nullptr);
+    explicit AlgoMap(QWidget* parent = nullptr);
     ~AlgoMap();
 
     /**
@@ -76,6 +86,11 @@ public:
     void addAlgorithm(const QString& category, const QString& algorithm);
 
     /**
+     * @brief Get the group of buttons
+    */
+    QButtonGroup* algorithmsButtons() const;
+
+    /**
      * @brief Get the selected algorithm
      * 
      * @return QRadioButton* the selected algorithm button
@@ -87,17 +102,19 @@ public:
     */
     core::OneToVectorMap<QString, QString> getAlgorithmsMap() const;
 
+signals:
+    void initialized();
+    void algorithmAdded(const QString& category, const QString& algorithm);
+    
 private:
     // Set a layout for AlgoMap
     QGridLayout* _layout;
 
     // Group all buttons to prevent multiple selection
     QButtonGroup* _group;
-
+    
     // Map of algorithms
     core::OneToVectorMap<QString, QString> _algorithmsMap;
-    
-    
 };
 
 _END_ALGOVIZ_UI

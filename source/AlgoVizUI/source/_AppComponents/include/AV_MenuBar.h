@@ -48,10 +48,12 @@ _BEGIN_ALGOVIZ_UI
 class MenuBar : public QWidget
 {
 public:
-    MenuBar(core::QStringOneToVectorMap menus, QWidget* parent = nullptr);
+    MenuBar(QWidget* parent = nullptr);
     ~MenuBar();
 
     QMenuBar* minuBarWidget() const { return _menuBar; }
+
+    void addMenu(const QString& menuName, const QStringList& actions);
 
 private:
     QGridLayout* _layout;

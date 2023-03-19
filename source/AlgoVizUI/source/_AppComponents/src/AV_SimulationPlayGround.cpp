@@ -26,8 +26,8 @@ _BEGIN_ALGOVIZ_UI
 
 SimulationPlayGround::SimulationPlayGround(QWidget *parent) :   QWidget(parent)
 , _layout(new QGridLayout(this))
-, _toolbar_layout(new QGridLayout(this))
-, _view(new QWidget(this))
+, _toolbar_layout(new QGridLayout())
+, _view(new QWidget())
 {
     // set the layout of the widget
     setLayout(_layout);
@@ -67,6 +67,7 @@ SimulationPlayGround::~SimulationPlayGround()
 
 void SimulationPlayGround::setView(QWidget *view)
 {
+    emit viewChanged(view);
     _view->setLayout(view->layout());
 }
 

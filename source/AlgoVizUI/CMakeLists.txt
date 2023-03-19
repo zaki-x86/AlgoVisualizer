@@ -17,6 +17,9 @@ add_subdirectory(source/_AppLayout)
 message(STATUS "Building ${PROJECT_NAME} UI Graphical Views")
 add_subdirectory(source/_GraphicalViews)
 
+message(STATUS "Building ${PROJECT_NAME} UI Window Client")
+add_subdirectory(source/_WindowClient)
+
 message(STATUS "Building ${PROJECT_NAME} UI Utilities")
 add_subdirectory(source/QBorderLayout)
 
@@ -48,6 +51,7 @@ target_link_libraries(
     ${PROJECT_NAME}UI
     INTERFACE
     AlgoViz::Core
+    AlgoViz::UI::WindowClient
     AlgoViz::UI::Components
     AlgoViz::UI::Layout
     AlgoViz::UI::GraphicalViews

@@ -40,39 +40,36 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
-#include <QSlider>
-#include <QVector>
+#include <QSpinBox>
+
+#include <QIcon>
 
 _BEGIN_ALGOVIZ_UI
 
 class Controls : public QWidget
 {
+    Q_OBJECT
 public:
-    explicit Controls(QVector<QString> buttons, QWidget* parent = nullptr);
+    explicit Controls(QWidget* parent = nullptr);
     ~Controls();
 
     // Button accessors functions for (play, pause, speedup and reset)
-    QPushButton* playBtn() const;
-    QPushButton* pauseBtn() const;
-    QPushButton* speedupBtn() const;
-    QPushButton* resetBtn() const;
+    QPushButton* play() const;
+    QPushButton* pause() const;
+    QSpinBox* speed() const;
+    QPushButton* reset() const;
 
-    // Connect the buttons to the slots
-    // functions are overloaded to accept a lambda function, so that there is no need to pass a receiver object
-    void connectToPlayBtn(QObject* receiver, const char* slot);
-    void connectToPlayBtn(core::av_slot_t slot);
-    void connectToPauseBtn(QObject* receiver, const char* slot);
-    void connectToSpeedupBtn(QObject* receiver, const char* slot);
-    void connectToResetBtn(QObject* receiver, const char* slot);
+signals:
+    void initialized();
 
+public slots:
+    /**
+     * @brief create a control button
+    */
+    QPushButton* createButton(QString name, QString icon);
 
 private:
     QGridLayout* _layout;
-    QVector<QString> _buttons; //{play, pause, speedup, reset}
-
-    // Validate the buttons, they must contain (play, pause, speedup and reset)
-    // TODO implementation needs to be completed
-    bool _validate_buttons() { return true; }
 };
 
 _END_ALGOVIZ_UI

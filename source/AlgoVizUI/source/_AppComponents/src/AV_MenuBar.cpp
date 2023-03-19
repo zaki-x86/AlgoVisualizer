@@ -33,34 +33,30 @@
 
 _BEGIN_ALGOVIZ_UI
 
-MenuBar::MenuBar(core::QStringOneToVectorMap menus, QWidget* parent)
+MenuBar::MenuBar(QWidget* parent)
 : QWidget(parent)
 , _menuBar(new QMenuBar())
-, _menus(menus)
 {
     setLayout(new QGridLayout());
     layout()->setSpacing(0);
     layout()->setContentsMargins(0, 0, 0, 0);
     layout()->setAlignment(Qt::AlignTop);
     layout()->addWidget(_menuBar);
-
-    for (auto menu : _menus.keys())
-    {
-        QMenu* menuBarMenu = new QMenu(menu);
-        _menuBar->addMenu(menuBarMenu);
-
-        for (auto action : _menus[menu])
-        {
-            QAction* menuBarAction = new QAction(action);
-            menuBarMenu->addAction(menuBarAction);
-        }
-    }
 }
 
 MenuBar::~MenuBar()
 {
     delete _menuBar;
     
+}
+
+void MenuBar::addMenu(const QString& menuName, const QStringList& actions)
+{
+    QMenu* menu = _menuBar->addMenu(menuName);
+    for (const QString& action : actions)
+    {
+        menu->addAction(action);
+    }
 }
 
 _END_ALGOVIZ_UI

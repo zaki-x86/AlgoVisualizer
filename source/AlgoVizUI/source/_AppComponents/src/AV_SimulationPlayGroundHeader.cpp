@@ -36,34 +36,65 @@ _BEGIN_ALGOVIZ_UI
 SimulationPlayGroundHeader::SimulationPlayGroundHeader(QWidget* parent)
     : QWidget(parent)
     , _layout(new QGridLayout(this))
-    , _titleLabel(new QLabel(this))
-    , _descriptionLabel(new QLabel(this))
 {
-    setLayout(_layout);
-
     _layout->setContentsMargins(0, 0, 0, 0);
     _layout->setSpacing(0);
+    
+    QLabel* title = new QLabel(this);
+    _layout->addWidget(title, 0, 0, 1, 1, Qt::AlignCenter);
+    QLabel* description = new QLabel(this);
+    _layout->addWidget(description, 1, 0, 1, 1, Qt::AlignLeft);
 
-    _titleLabel->setAlignment(Qt::AlignHCenter);
-    _layout->addWidget(_titleLabel, 0, 0, 1, 1);
+    //The description label should have a smaller font size and a lighter color. The row that contains the description label should be higher than the row that contains the title label.
+    QFont font = description->font();
+    font.setPointSize(8);
+    description->setFont(font);
+    description->setStyleSheet("QLabel { color : gray; }");
+    _layout->setRowMinimumHeight(1, 50);
 
-    _descriptionLabel->setAlignment(Qt::AlignCenter);
-    _layout->addWidget(_descriptionLabel, 1, 0, 1, 1);
+    //The title label should have a bigger font size and a darker color. The row that contains the title label should be higher than the row that contains the description label.
+    font.setPointSize(12);
+    title->setFont(font);
+    title->setStyleSheet("QLabel { color : black; }");
+    _layout->setRowMinimumHeight(0, 20);   
+
+    emit initialized();
 }
 
 SimulationPlayGroundHeader::~SimulationPlayGroundHeader()
 {
+    // look for items in the layout and delete
+    for (int i = 0; i < _layout->count(); i++)
+    {
+        QLayoutItem* item = _layout->itemAt(i);
+        if (item->widget())
+        {
+            delete item->widget();
+        }
+    }
     delete _layout;
 }
 
-void SimulationPlayGroundHeader::setTitle(const QString& title)
+QString SimulationPlayGroundHeader::title() const
 {
-    _titleLabel->setText(title);
+    return static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->text();
 }
 
-void SimulationPlayGroundHeader::setDescription(const QString& description)
+QString SimulationPlayGroundHeader::description() const
 {
-    _descriptionLabel->setText(description);
+    return static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->text();
+}
+
+void SimulationPlayGroundHeader::setTitle(QString title)
+{
+    emit titleChanged(title);
+    static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->setText(title);
+}
+
+void SimulationPlayGroundHeader::setDescription(QString description)
+{
+    emit descriptionChanged(description);
+    static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->setText(description);
 }
 
 _END_ALGOVIZ_UI

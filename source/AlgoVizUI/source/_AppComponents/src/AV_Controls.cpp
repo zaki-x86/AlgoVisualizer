@@ -33,25 +33,14 @@
 
 _BEGIN_ALGOVIZ_UI
 
-Controls::Controls(QList<QString> buttons, QWidget* parent)
+Controls::Controls(QWidget* parent)
 : QWidget(parent)
 , _layout(new QGridLayout())
-, _buttons(buttons)
 {
     setLayout(_layout);
     _layout->setSpacing(0);
     _layout->setContentsMargins(20, 20, 20, 20);
     _layout->setAlignment(Qt::AlignTop);
-
-    if (_validate_buttons())
-    {
-        // Add the buttons to the layout
-        for (int i = 0; i < _buttons.size(); i++)
-        {
-            QPushButton* button = new QPushButton(_buttons[i]);
-            _layout->addWidget(button, i, 0);
-        }
-    }
 }
 
 Controls::~Controls()
@@ -65,36 +54,69 @@ Controls::~Controls()
     }
 }
 
-QPushButton* Controls::playBtn() const
+
+QPushButton* Controls::createButton(QString name, QString icon)
 {
-    return (QPushButton*)_layout->itemAtPosition(0, 0)->widget();
+    QString _iconpath = QString(_APP_ICONS_PATH) + icon;
+    QPushButton* button = new QPushButton(name);
+    button->setObjectName(name);
+    button->setFixedSize(100, 30);
+    button->setIcon(QIcon(_iconpath));
+    button->setIconSize(QSize(20, 20));
+    button->setStyleSheet("QPushButton { background-color: #2c2c2c; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; } QPushButton:hover { background-color: #3c3c3c; } QPushButton:pressed { background-color: #1c1c1c; }");
+    return button;
+}
+
+QPushButton* Controls::play() const
+{
+    // looks for a button in the grid layout items that has the text "Play" or "play"
+    for (int i = 0; i < _layout->count(); i++)
+    {
+        if (static_cast<QPushButton*>(_layout->itemAt(i)->widget())->text().toLower() == "play")
+        {
+            return (QPushButton*)_layout->itemAt(i)->widget();
+        }
+    }
 }
 
 
-QPushButton* Controls::pauseBtn() const
+QPushButton* Controls::pause() const
 {
-    return (QPushButton*)_layout->itemAtPosition(1, 0)->widget();
+    // looks for a button in the grid layout items that has the text "pause" or "Pause"
+    for (int i = 0; i < _layout->count(); i++)
+    {
+        // cast he widget to a push button first before checking the text
+        if (static_cast<QPushButton*>(_layout->itemAt(i)->widget())->text().toLower() == "pause")
+        {
+            return (QPushButton*)_layout->itemAt(i)->widget();
+        }
+    }
 }
 
 
-QPushButton* Controls::speedupBtn() const
+QSpinBox* Controls::speed() const
 {
-    return (QPushButton*)_layout->itemAtPosition(2, 0)->widget();
+    // looks for a spinbox in the grid layout items that has the object name "speed"
+    // it casts the widget to a spinbox before it extracts the text
+    for (int i = 0; i < _layout->count(); i++)
+    {
+        if (static_cast<QPushButton*>(_layout->itemAt(i)->widget())->objectName() == "speed")
+        {
+            return (QSpinBox*)_layout->itemAt(i)->widget();
+        }
+    }
 }
 
-QPushButton* Controls::resetBtn() const
+QPushButton* Controls::reset() const
 {
-    return (QPushButton*)_layout->itemAtPosition(3, 0)->widget();
-}
-
-void Controls::connectToPlayBtn(QObject* receiver, const char* slot)
-{
-    connect(playBtn(), SIGNAL(clicked()), receiver, slot);
-}
-
-void Controls::connectToPlayBtn(core::av_slot_t slot)
-{
-    QObject::connect(playBtn(), &QPushButton::clicked, slot);
+    // looks for a button in the grid layout items that has the text "reset" or "Reset"
+    for (int i = 0; i < _layout->count(); i++)
+    {
+        if (static_cast<QPushButton*>(_layout->itemAt(i)->widget())->text().toLower() == "reset")
+        {
+            return (QPushButton*)_layout->itemAt(i)->widget();
+        }
+    }
 }
 
 _END_ALGOVIZ_UI

@@ -40,48 +40,39 @@ SideBarHeader::SideBarHeader(QWidget* parent)
 	setLayout(_layout);
 	_layout->setContentsMargins(15, 15, 15, 15);
 	_layout->setSpacing(0);
-
-	_layout->addWidget(new QLabel, 0, 0, 1, 1, Qt::AlignTop);
-	_layout->addWidget(new QLabel, 1, 0, 1, 1, Qt::AlignTop);
-	
 }
 
 SideBarHeader::~SideBarHeader()
 {
 	delete _layout;
-	
-	// delete title label
-	QLayoutItem* item = _layout->itemAtPosition(0, 0);
-	if (item != nullptr) {
-		_layout->removeItem(item);
-		delete item->widget();
-		delete item;
-	}
-
-	// delete description label
-	item = _layout->itemAtPosition(1, 0);
-	if (item != nullptr) {
-		_layout->removeItem(item);
-		delete item->widget();
-		delete item;
-	}
 }
 
 QString SideBarHeader::titleLabel() const {
+	if (_layout->itemAtPosition(0, 0) == nullptr) {
+		return "";
+	}
+
 	return static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->text();
 }
 
 void SideBarHeader::setTitleLabel(const QString& titleLabel)
 {
+	_layout->addWidget(new QLabel, 0, 0, 1, 1, Qt::AlignTop);
+	
 	static_cast<QLabel*>(_layout->itemAtPosition(0, 0)->widget())->setText(titleLabel);
 }
 
 QString SideBarHeader::descriptionLabel() const {
+	if (_layout->itemAtPosition(1, 0) == nullptr) {
+		return "";
+	}
+	
 	return static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->text();
 }
 
 void SideBarHeader::setDescriptionLabel(const QString& descriptionLabel)
-{
+{	
+	_layout->addWidget(new QLabel, 1, 0, 1, 1, Qt::AlignTop);
 	static_cast<QLabel*>(_layout->itemAtPosition(1, 0)->widget())->setText(descriptionLabel);
 }
 
@@ -96,26 +87,10 @@ SideBarLayout::SideBarLayout(QWidget* parent)
 	setLayout(_layout);
 	_layout->setContentsMargins(10, 10, 10, 10);
 	_layout->setSpacing(0);
-
-	_layout->addWidget(new SideBarHeader, 0, 0, 1, 1, Qt::AlignTop);
-	_layout->setRowStretch(0, 1);
-
-	//TODO set relative minumum height to the header
-	_layout->itemAtPosition(0, 0)->widget()->setMinimumHeight(50);
 }
 
 SideBarLayout::~SideBarLayout()
 {
-	// Loop through all items in the layout and delete them
-	for (int i = 0; i < _layout->count(); i++) {
-		QLayoutItem* item = _layout->itemAt(i);
-		if (item != nullptr) {
-			_layout->removeItem(item);
-			delete item->widget();
-			delete item;
-		}
-	}
-	
 	delete _layout;
 }
 
@@ -125,6 +100,12 @@ SideBarHeader* SideBarLayout::sideBarHeader() const {
 
 void SideBarLayout::setSideBarHeader(QString title, QString description)
 {
+	_layout->addWidget(new SideBarHeader, 0, 0, 1, 1, Qt::AlignTop);
+	
+	_layout->setRowStretch(0, 1);
+
+	_layout->itemAtPosition(0, 0)->widget()->setMinimumHeight(50);
+
 	sideBarHeader()->setTitleLabel(title);
 	sideBarHeader()->setDescriptionLabel(description);
 }
@@ -132,6 +113,7 @@ void SideBarLayout::setSideBarHeader(QString title, QString description)
 void SideBarLayout::addWidget(QWidget* widget)
 {
 	_layout->addWidget(widget, _layout->rowCount(), 0, 1, 1, Qt::AlignTop);
+	
 	_layout->setRowStretch(_layout->rowCount(), 1);
 
 	// set minimum height to be 5 times the height of the header

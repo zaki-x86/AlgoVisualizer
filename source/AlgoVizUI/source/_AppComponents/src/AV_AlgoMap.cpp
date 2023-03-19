@@ -33,36 +33,16 @@
 
 _BEGIN_ALGOVIZ_UI
 
-AlgoMap::AlgoMap(core::OneToVectorMap<QString, QString> algorithms, QWidget* parent)
+AlgoMap::AlgoMap(QWidget* parent)
     : QWidget(parent)
     , _layout(new QGridLayout(this))
     , _group(new QButtonGroup(this))
-    , _algorithmsMap(algorithms)
 {
     _group->setExclusive(true);
 
     setLayout(_layout);
-    _layout->setContentsMargins(0, 0, 0, 0);
+    _layout->setContentsMargins(5, 5, 5, 5);
     _layout->setSpacing(0);
-
-    for (auto it = algorithms.begin(); it != algorithms.end(); it++)
-    {
-        auto category = it.key();
-        auto algorithms = it.value();
-    
-        QLabel* categoryLabel = new QLabel(category, this);
-        categoryLabel->setStyleSheet("font-weight: bold;");
-        _layout->addWidget(categoryLabel, _layout->rowCount(), 0);
-        // set padding for category label
-        _layout->setRowMinimumHeight(_layout->rowCount(), 50);
-
-        for (auto& algorithm : algorithms)
-        {
-            auto algorithmButton = new QRadioButton(algorithm, this);
-            _group->addButton(algorithmButton);
-            _layout->addWidget(algorithmButton, _layout->rowCount(), 0);
-        }
-    }
 }
 
 AlgoMap::~AlgoMap()
@@ -88,7 +68,22 @@ AlgoMap::~AlgoMap()
 
 void AlgoMap::addAlgorithm(const QString& category, const QString& algorithm)
 {
-    
+     QLabel* categoryLabel = new QLabel(category, this);
+    categoryLabel->setStyleSheet("font-weight: bold;");
+    _layout->addWidget(categoryLabel, _layout->rowCount(), 0);
+    // set padding for category label
+    _layout->setRowMinimumHeight(_layout->rowCount(), 50);
+
+    auto algorithmButton = new QRadioButton(algorithm, this);
+    _group->addButton(algorithmButton);
+    _layout->addWidget(algorithmButton, _layout->rowCount(), 0);
+
+    emit algorithmAdded(category, algorithm);
+}
+
+QButtonGroup* AlgoMap::algorithmsButtons() const
+{
+    return _group;
 }
 
 QRadioButton* AlgoMap::getSelectedAlgorithm() const

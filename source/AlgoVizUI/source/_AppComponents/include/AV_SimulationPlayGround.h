@@ -74,6 +74,10 @@ public slots:
     void setView(QWidget* view);
     void setToolbar(QList<QString> buttons);
 
+signals:
+    void initialized();
+    void viewChanged(QWidget* view);
+
  private:
     QGridLayout* _layout;
     QGridLayout* _toolbar_layout;

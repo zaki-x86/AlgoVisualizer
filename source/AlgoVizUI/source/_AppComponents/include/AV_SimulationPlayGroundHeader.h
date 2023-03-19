@@ -39,25 +39,32 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QLabel>
+#include <QFont>
+#include <QColor>
+#include <QLayoutItem>
 
 _BEGIN_ALGOVIZ_UI
 
 class SimulationPlayGroundHeader : public QWidget
 {
+    Q_OBJECT
 public:
     explicit SimulationPlayGroundHeader(QWidget* parent = nullptr);
     ~SimulationPlayGroundHeader();
 
     QString title() const ;
-    void setTitle(const QString& title);
-
     QString description() const;
-    void setDescription(const QString& description);
 
+public slots:
+    void setTitle(QString title);
+    void setDescription(QString description);
+
+signals:
+    void initialized();
+    void titleChanged(QString title);
+    void descriptionChanged(QString description);
 private:
     QGridLayout* _layout;
-    QLabel* _titleLabel;
-    QLabel* _descriptionLabel;
 };
 
 _END_ALGOVIZ_UI

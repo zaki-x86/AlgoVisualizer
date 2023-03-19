@@ -27,96 +27,84 @@
  * @date 2023-12-3
  * @version 1.0
  * @note This class is used to create the UI of the application
-*/
+ */
 
 #include "AV_WindowLayout.h"
 
 _BEGIN_ALGOVIZ_UI
 
-MainWindow& MainWindow::init(QWidget* parent)
+
+MainWindow::MainWindow(QWidget *parent) 
+: _mainWindowLayout(new QGridLayout()), QWidget(parent)
 {
-    static MainWindow _instance(parent);
-    return _instance;
-}
+	setLayout(_mainWindowLayout);
+	_mainWindowLayout->setContentsMargins(5, 5, 5, 5);
+	_mainWindowLayout->setSpacing(0);
 
-MainWindow::MainWindow(QWidget* parent) 
-: _mainWindowLayout (new QGridLayout())
-, QWidget(parent)
-{
-    setLayout(_mainWindowLayout);
-    _mainWindowLayout->setContentsMargins(5, 5, 5, 5);
-    _mainWindowLayout->setSpacing(0);
-
-    _mainWindowLayout->addWidget(new SideBarLayout, 0, 0, 1, 1);
-    _mainWindowLayout->addWidget(new SideBarLayout, 0, 2, 1, 1);
-    _mainWindowLayout->addWidget(new CentralLayout, 0, 1, 1, 1);         
-    
-    _mainWindowLayout->setColumnStretch(1, 4);
-
-    _adjustSideBarsLayout();
-    _adjustCentralLayout();
+	emit initialized();
 }
 
 MainWindow::~MainWindow()
 {
-    // delete all items in the layout
-    for (int i = 0; i < _mainWindowLayout->count(); i++)
-    {
-        delete _mainWindowLayout->itemAt(i);
-    }
-    
-    delete _mainWindowLayout;
+	delete _mainWindowLayout;
 }
 
-CentralLayout* MainWindow::central() const
+CentralLayout *
+MainWindow::central() const
 {
-    // get the central layout from the grid layout
-    return static_cast<CentralLayout*>(_mainWindowLayout->itemAtPosition(0, 1)->widget());
+	// get the central layout from the grid layout
+	return static_cast<CentralLayout *>(_mainWindowLayout->itemAtPosition(0, 1)->widget());
 }
 
-void MainWindow::setCentral(CentralLayout* central)
+void
+MainWindow::setCentral(CentralLayout *central)
 {
-    // set the central layout in the grid layout, remove the old one if it exists
-    if (_mainWindowLayout->itemAtPosition(0, 1))
-    {
-        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 1)->widget());
-    }
-    _mainWindowLayout->addWidget(central, 0, 1, 1, 1);
+	// set the central layout in the grid layout, remove the old one if it exists
+	if (_mainWindowLayout->itemAtPosition(0, 1))
+	{
+		_mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 1)->widget());
+	}
+	_mainWindowLayout->addWidget(central, 0, 1, 1, 1);
 
-    _adjustCentralLayout();
+	_adjustCentralLayout();
 }
 
-SideBarLayout* MainWindow::leftBar() const
+SideBarLayout *
+MainWindow::leftBar() const
 {
-    return static_cast<SideBarLayout*>(_mainWindowLayout->itemAtPosition(0, 0)->widget());
+	return static_cast<SideBarLayout *>(_mainWindowLayout->itemAtPosition(0, 0)->widget());
 }
 
-void MainWindow::setLeftBar(SideBarLayout* leftBar)
+void
+MainWindow::setLeftBar(SideBarLayout *leftBar)
 {
-    // set the left sidebar layout in the grid layout, remove the old one if it exists
-    if (_mainWindowLayout->itemAtPosition(0, 0))
-    {
-        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 0)->widget());
-    }
-    _mainWindowLayout->addWidget(leftBar, 0, 0, 1, 1);
-    _adjustSideBarsLayout();
+	// set the left sidebar layout in the grid layout, remove the old one if it exists
+	if (_mainWindowLayout->itemAtPosition(0, 0))
+	{
+		_mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 0)->widget());
+	}
+	_mainWindowLayout->addWidget(leftBar, 0, 0, 1, 1);
+	_adjustSideBarsLayout();
 }
 
-SideBarLayout* MainWindow::rightBar() const
+SideBarLayout *
+MainWindow::rightBar() const
 {
-    return static_cast<SideBarLayout*>(_mainWindowLayout->itemAtPosition(0, 2)->widget());
+	return static_cast<SideBarLayout *>(_mainWindowLayout->itemAtPosition(0, 2)->widget());
 }
 
-void MainWindow::setRightBar(SideBarLayout* rightBar)
+void
+MainWindow::setRightBar(SideBarLayout *rightBar)
 {
-    // set the right sidebar layout in the grid layout, remove the old one if it exists
-    if (_mainWindowLayout->itemAtPosition(0, 2))
-    {
-        _mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 2)->widget());
-    }
-    _mainWindowLayout->addWidget(rightBar, 0, 2, 1, 1);
-    _adjustSideBarsLayout();
+	// set the right sidebar layout in the grid layout, remove the old one if it exists
+	if (_mainWindowLayout->itemAtPosition(0, 2))
+	{
+		_mainWindowLayout->removeWidget(_mainWindowLayout->itemAtPosition(0, 2)->widget());
+	}
+	_mainWindowLayout->addWidget(rightBar, 0, 2, 1, 1);
+	_adjustSideBarsLayout();
 }
+
 
 
 _END_ALGOVIZ_UI
