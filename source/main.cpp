@@ -26,34 +26,9 @@
 
 #include <QApplication>
 
-// --- import UI components ---
-
-
-#include "AV_MenuBar.h"
-#include "AV_AlgoMap.h"
-#include "AV_Controls.h"
-#include "AV_SimulationPlayGroundHeader.h"
-#include "AV_SimulationPlayGround.h"
-#include "AV_StatusBar.h"
-
-
-// --- import UI layout ---
-#include "AV_WindowLayout.h"
-#include "AV_HeaderLayout.h"
-#include "AV_CentralLayout.h"
-#include "AV_SideBarLayout.h"
-
-
-
-// *** delete this later
-#include "AV_Config.h"
 #include "Store/AlgoVizStore.h"
-#include "Algos/Sort/BubbleSort.h"
-#include "Algos/Sort/SelectionSort.h"
-#include <QDebug>
-#include <QPushButton>
-#include <QHBoxLayout>
-// *************************
+#include "WindowClient.h"
+#include "AlgoVizController.h"
 
 // implement a swap function that takes two push buttons as input and swap the text values within them
 
@@ -67,17 +42,18 @@ main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	// Initialize App Model
+	AlgoViz::model::AlgoVizStore* store = AlgoViz::model::AlgoVizStore::initStore();
 
+	// Initialize App View
+	AlgoViz::ui::WindowClient* gui = AlgoViz::ui::WindowClient::initClient();
+	
 	// Initialize App Controller
+	AlgoViz::control::AlgoVizController* controller = 
+	AlgoViz::control::AlgoVizController::initController(store, gui);
 
-	// Initialize App UI
-
-	// -- TEST CODE (TEMPORARY SECTION) --
-	// debug a message when status bar sends initialize() signal
-	ui::StatusBar *statusBar = new ui::StatusBar();
-	QObject::connect(statusBar, &ui::StatusBar::initialized,[]() {
-		qDebug() << "Status bar initialized";
-	});
+	controller->run();
+	store->run();
+	gui->run();
 	
 	return app.exec();
 }
