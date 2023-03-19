@@ -45,6 +45,9 @@
 
 #include "AV_Config.h"
 
+
+// setup a log macro, that uses qdebug to print message, it should start the log with "Filename: __FILE__ in __LINE__ : <msg>"
+#define _LOG() qDebug() << "From file: " << __FILE__ << "\n, line no. " << __LINE__ << ":" << "\n"
 _BEGIN_ALGOVIZ_CORE
 
 
