@@ -36,13 +36,34 @@ _BEGIN_ALGOVIZ_UI
 
 StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
+    , copyrightLabel(new QLabel(this))
 {
-    _statusMessage = "Ready";
-    showMessage(_statusMessage);
+    addPermanentWidget(copyrightLabel, 0);
+    
+    _configureCopyrightLabel();
+    
+    
+    emit initialized();
+
 }
 
 StatusBar::~StatusBar()
 {
+    delete copyrightLabel;
 }
+
+QString StatusBar::copyrightText() const
+{
+    return copyrightLabel->text();
+}
+
+void StatusBar::setCopyRightText(const QString& title)
+{
+    copyrightLabel->setText(title);
+}
+
+
+
+
 
 _END_ALGOVIZ_UI 

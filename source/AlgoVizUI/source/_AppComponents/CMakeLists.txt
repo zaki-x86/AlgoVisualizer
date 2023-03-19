@@ -1,3 +1,7 @@
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 file(GLOB_RECURSE UI_AppComponents_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc
@@ -10,6 +14,7 @@ file(GLOB_RECURSE UI_AppComponents_HEADERS
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_add_library(UI_AppComponents
         ${UI_AppComponents_SOURCES}
+        ${UI_AppComponents_HEADERS}
     )
     add_library(
         AlgoViz::UI::Components 
@@ -19,6 +24,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
 else()
     add_library(UI_AppComponents
         ${UI_AppComponents_SOURCES}
+        
     )
     add_library(
         AlgoViz::UI::Components 
@@ -29,7 +35,6 @@ else()
 endif()
 
 target_link_libraries(UI_AppComponents
-    PRIVATE
         AlgoVizCore
         Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Widgets

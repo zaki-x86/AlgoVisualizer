@@ -48,7 +48,7 @@
 #include <QRadioButton>
 #include <QDebug>
 
-#include "SimulationViews/AV_SortingView.h"
+//#include "AV_SortingView.h"
 
 #define MIN 0
 #define MAX 100
@@ -77,7 +77,7 @@ public slots:
  private:
     QGridLayout* _layout;
     QGridLayout* _toolbar_layout;
-    core::QElementList<QPushButton*> _toolbar_buttons;
+    core::QElementList<QPushButton*> _toolbar;
     QWidget* _view;
 };
 

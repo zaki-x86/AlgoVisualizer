@@ -27,7 +27,7 @@
  * @version 0.1
  * @date 2023-03-12
  * @note This file is part of AlgoVisualizer project
-*/
+ */
 
 #ifndef __AV_STATUS_BAR_H
 #define __AV_STATUS_BAR_H
@@ -35,21 +35,43 @@
 #include "AV_Config.h"
 #include "AV_Utils.h"
 
+#include <QObject>
 #include <QWidget>
 #include <QGridLayout>
 #include <QStatusBar>
-
+#include <QLabel>
 
 _BEGIN_ALGOVIZ_UI
 
 class StatusBar : public QStatusBar
 {
+	Q_OBJECT
 public:
-    explicit StatusBar(QWidget* parent = nullptr);
-    ~StatusBar();
-    
+	explicit StatusBar(QWidget *parent = nullptr);
+	~StatusBar();
+
+	QString
+	copyrightText() const;
+
+public slots:
+	void
+	setCopyRightText(const QString &title);
+
+signals:
+	void
+	initialized();
+
+protected:
+	void
+	_configureCopyrightLabel()
+	{
+		copyrightLabel->setMinimumSize(copyrightLabel->fontMetrics().boundingRect(copyrightLabel->text()).size());
+
+		copyrightLabel->setAlignment(Qt::AlignRight);
+	}
+
 private:
-    QString _statusMessage;
+	QLabel *copyrightLabel;
 };
 
 _END_ALGOVIZ_UI
