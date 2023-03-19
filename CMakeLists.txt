@@ -72,7 +72,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 ##################################################################################
 # Qt Configurations
 ##################################################################################
-set(CMAKE_AUTOMOC OFF)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
