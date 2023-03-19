@@ -39,6 +39,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QSpinBox>
 
@@ -58,54 +59,90 @@ _BEGIN_ALGOVIZ_UI
 */
 class SortingView : public QWidget
 {
-    //Q_OBJECT
-
 public:
     SortingView(QWidget* parent = nullptr);
     
     ~SortingView();
 
-
-//public slots:
     /**
-     * @brief a slot function to be called when the number of buttons is changed
+     * @brief Get the Buttons Count object
+     * 
+     * @return uint8_t 
     */
-    void onButtonsCountChanged(int count) {}
+    uint8_t buttonsCount() const;
+    /**
+     * @brief Get the Buttons object
+     * 
+     * @return std::array<QPushButton*, DEFAULT_LENGTH> 
+    */
+    core::QElementList<QPushButton*> buttons() const;
+
+    /**
+     * @brief Add a button to the buttons list
+     * 
+     * @param button
+     * @return QPushButton*
+    */
+    void addButton(QPushButton* button);
+
+    /**
+     * @brief Get the Buttons Layout object
+     * 
+     * @return QGridLayout* 
+    */
+    QHBoxLayout* buttonsLayout() const;
+
+    /**
+     * @brief Get the Buttons Count Spin Box object
+     * 
+     * @return QSpinBox* 
+    */
+    QSpinBox* buttonsCountSpinBox() const;
+
 
 private:
     QGridLayout* _layout;
-    QGridLayout* _buttonsLayout;
+    QHBoxLayout* _buttonsLayout;
     uint8_t _buttonsCount;
     QSpinBox* _buttonsCountSpinBox;
-    std::vector<int> _data;
-    std::array<QPushButton *, DEFAULT_LENGTH> _buttons;
+    core::QElementList<QPushButton*> _buttons;
 
 protected:    
-    void _configureViewLayout(QLayout* layout, int margin, int spacing) {
-    layout->setContentsMargins(margin, margin, margin, margin);
-    layout->setSpacing(spacing);
-    _layout->setRowStretch(0, 5);
-    _layout->setRowStretch(1, 1);
+    void _adjustViewLayout(QLayout* layout, int margin, int spacing) {
+        layout->setContentsMargins(margin, margin, margin, margin);
+        layout->setSpacing(spacing);
+        _layout->setRowStretch(0, 5);
+        _layout->setRowStretch(1, 1);
 
-    // Set the view style sheet
-    setStyleSheet("background-color: #2c2f33; color: #ffffff;");
+        // Set the view style sheet
+        setStyleSheet("background-color: #2c2f33; color: #ffffff;");
     }
 
-    void _configureButtonsLayout(QLayout* layout, int margin, int spacing){
-    layout->setContentsMargins(margin, margin, margin, margin);
-    layout->setSpacing(spacing);
+    void _adjustButtonsLayout(int margin, int spacing){
+        // the buttons layout is a horizontal layout
+        // so we need to set the stretch factor for each button
+        _buttonsLayout->setContentsMargins(margin, margin, margin, margin);
+        _buttonsLayout->setSpacing(spacing);
+        for (auto& button : _buttons) {
+            _buttonsLayout->addWidget(button);
+        }
+
     }
 
     void _configureSpinBox(int min, int max, int step, int value, const QString& suffix, Qt::Alignment alignment) {
-    _buttonsCountSpinBox->setRange(min, max);
-    _buttonsCountSpinBox->setValue(value);
-    _buttonsCountSpinBox->setSingleStep(step);
-    _buttonsCountSpinBox->setSuffix(suffix);
-    _buttonsCountSpinBox->setAlignment(alignment);
+        _buttonsCountSpinBox->setRange(min, max);
+        _buttonsCountSpinBox->setValue(value);
+        _buttonsCountSpinBox->setSingleStep(step);
+        _buttonsCountSpinBox->setSuffix(suffix);
+        _buttonsCountSpinBox->setAlignment(alignment);
     }
 
     void _configureButtons() {
-    
+        for (auto& button : _buttons) {
+            button->setMinimumSize(50, 50);
+            button->setMaximumSize(50, 50);
+            button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        }
     }
 };
 

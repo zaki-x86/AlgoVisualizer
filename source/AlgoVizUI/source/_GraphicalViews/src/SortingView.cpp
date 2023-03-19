@@ -36,41 +36,76 @@ _BEGIN_ALGOVIZ_UI
 SortingView::SortingView(QWidget* parent)
     : QWidget(parent)
     , _layout(new QGridLayout(this))
-    , _buttonsLayout(new QGridLayout(this))
+    , _buttonsLayout(new QHBoxLayout())
     , _buttonsCount(DEFAULT_LENGTH)
-    , _data()
     , _buttons()
     , _buttonsCountSpinBox(new QSpinBox(this))
 {
     // Set the view layout
     setLayout(_layout);
 
+    // add the buttons layout to the view layout
+    _layout->addLayout(_buttonsLayout, 0, 0, 1, 1, Qt::AlignLeft);
+    // add the buttons count spinbox to the view layout
+    _layout->addWidget(_buttonsCountSpinBox, 1, 0, 1, 1, Qt::AlignCenter);
+
     // Configure the view layout
-    _configureViewLayout(_layout, 5, 0);
+    _adjustViewLayout(_layout, 5, 0);
 
     // Configure the buttons layout
-    _configureButtonsLayout(_buttonsLayout, 1, 0);
+    _adjustButtonsLayout(5, 0);
 
     // Configure the buttons count spinbox
     _configureSpinBox(1, 100, 1, DEFAULT_LENGTH, " Buttons", Qt::AlignCenter);
 
     //connect(_buttonsCountSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onButtonsCountChanged(int)));
     //onButtonsCountChanged(DEFAULT_LENGTH);
-    
-    // add the buttons layout to the view layout
-    _layout->addLayout(_buttonsLayout, 0, 0, 1, 1, Qt::AlignLeft);
-    // add the buttons count spinbox to the view layout
-    _layout->addWidget(_buttonsCountSpinBox, 1, 0, 1, 1, Qt::AlignCenter);
 
     // Configure the buttons: set text inside the buttons
     _configureButtons();
-
 }
 
 SortingView::~SortingView()
 {
+    // delete the buttons layout
+    delete _buttonsLayout;
+    // delete the buttons count spinbox
+    delete _buttonsCountSpinBox;
     // delete the buttons
-
+    for (auto& button : _buttons)
+    {
+        delete button;
+    }
+    // delete the view layout
+    delete _layout;
 }
+
+core::QElementList<QPushButton*> SortingView::buttons() const
+{
+    return _buttons;
+}
+
+uint8_t SortingView::buttonsCount() const
+{
+    return _buttonsCount;
+}
+
+void SortingView::addButton(QPushButton* button)
+{
+    _buttons.append(button);
+
+    _buttonsLayout->addWidget(button);
+}
+
+QHBoxLayout* SortingView::buttonsLayout() const
+{
+    return _buttonsLayout;
+}
+
+QSpinBox* SortingView::buttonsCountSpinBox() const
+{
+    return _buttonsCountSpinBox;
+}
+
 
 _END_ALGOVIZ_UI
