@@ -19,3 +19,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+#include "AlgoVizController.h"
+
+_BEGIN_ALGOVIZ_CONTROL
+
+AlgoVizController::AlgoVizController(model::AlgoVizStore* store, ui::WindowClient* view, QObject *parent) 
+: QObject(parent)
+, _store(store)
+, _view(view)
+{}
+
+AlgoVizController::~AlgoVizController() {}
+
+AlgoVizController *
+AlgoVizController::initController( model::AlgoVizStore *store, ui::WindowClient *window, QObject *parent)
+{
+	// create the controller
+	static AlgoVizController *controller = new AlgoVizController(store, window);
+
+	return controller;
+}
+
+void AlgoVizController::onInitMainWindow() {
+        // get window title from the store
+		QString appName = _store->AppDataModel()["AppName"].toString();
+		_LOG() << "AppName: " << appName;
+		QString appDesc = _store->AppDataModel()["AppDescription"].toString();
+		_LOG() << "AppDesc: " << appDesc;
+		QString appVersion = _store->AppDataModel()["AppVersion"].toString();
+		_LOG() << "AppVersion: " << appVersion;
+
+		// set the window title
+		QString windowTitle = appName + " " + appVersion + " - " + appDesc;
+
+        // set the window title
+        _view->window()->setWindowTitle(windowTitle);
+        // set the window size
+        _view->window()->resize(800, 600);
+}
+
+void AlgoVizController::onInitLayouts() {
+		
+}
+
+void AlgoVizController::onInitComponents() {
+		
+}
+
+void AlgoVizController::run()
+{
+	QObject::connect(_view, &ui::WindowClient::initMainWindow, this, &AlgoVizController::onInitMainWindow);
+
+	QObject::connect(_view, &ui::WindowClient::initLayouts, this, &AlgoVizController::onInitLayouts);
+
+	QObject::connect(_view, &ui::WindowClient::initComponents, this, &AlgoVizController::onInitComponents);
+}
+
+_END_ALGOVIZ_CONTROL

@@ -39,12 +39,11 @@
 #include <QThread>
 #include <QTimer>
 #include <QElapsedTimer>
+#include <QString>
 
 // import AlgoViz store
 #include "Store/AlgoVizStore.h"
-
-#include "AV_SimulationPlayGround.h"
-#include "AV_SimulationPlayGroundHeader.h"
+#include "WindowClient.h"
 
 _BEGIN_ALGOVIZ_CONTROL
 
@@ -52,17 +51,40 @@ _BEGIN_ALGOVIZ_CONTROL
  * @brief AlgoVizController is a singleton class that controls the simulation and control the flow of data between the model and the UI.
  * 
  * @note This class is a singleton class, so it can only be instantiated once.
- * 
- * 
 */
 class AlgoVizController : public QObject
 {
     Q_OBJECT    
+
 public:
-    static AlgoVizController* init();
+    static AlgoVizController* initController(model::AlgoVizStore*, ui::WindowClient*, QObject* parent = nullptr);
 
+    void run();
+
+public slots:
+    void onInitMainWindow();
+    void onInitLayouts();
+    void onInitComponents();
     
+private:
+    AlgoVizController(model::AlgoVizStore* store, ui::WindowClient* view, QObject *parent = nullptr);
+    ~AlgoVizController();
 
+    // AlgoVizController is a singleton class, so it can only be instantiated once.
+    AlgoVizController(const AlgoVizController&) = delete;
+    AlgoVizController& operator=(const AlgoVizController&) = delete;
+
+    // AlgoVizController is a singleton class, so it can only be instantiated once.
+    AlgoVizController(AlgoVizController&&) = delete;
+    AlgoVizController& operator=(AlgoVizController&&) = delete;
+    
+    model::AlgoVizStore* _store;
+    ui::WindowClient* _view;
+};
+
+_END_ALGOVIZ_CONTROL
+
+#endif // __ALGOVIZ_CONTROLLER_H
 
 
 

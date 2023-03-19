@@ -8,7 +8,6 @@ add_library(${PROJECT_NAME}::Control ALIAS ${PROJECT_NAME}Control)
 target_include_directories(
     ${PROJECT_NAME}Control 
     PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/source
     ${CMAKE_CURRENT_SOURCE_DIR}/source/include
 )
 
